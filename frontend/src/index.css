@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* Custom scrollbars and smooth scroll base */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Lenis Smooth Scroll CSS Base */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Glassmorphic UI utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-dark {
+  background: rgba(8, 27, 58, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* LifePulse HealthTech Premium Red Hover Glow Utility System */
+.hover-red-glow {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-red-glow:hover {
+  box-shadow: 0 8px 24px -4px rgba(225, 29, 72, 0.18);
+  transform: translateY(-2px);
+}
+
+.hover-red-glow-subtle {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-red-glow-subtle:hover {
+  box-shadow: 0 4px 16px -2px rgba(225, 29, 72, 0.14);
+}
+
+.hover-red-glow-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-red-glow-button:hover {
+  box-shadow: 0 6px 20px -2px rgba(225, 29, 72, 0.25);
+  transform: translateY(-1px);
+}
+
+.focus-red-glow:focus, .focus-red-glow:focus-within {
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.2), 0 4px 12px rgba(225, 29, 72, 0.1);
+  border-color: rgba(225, 29, 72, 0.6) !important;
+}
