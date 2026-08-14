@@ -1,15 +1,19 @@
 import React from 'react';
 import Card from '../Card';
 import { Activity, FileText, HeartPulse, CheckCircle2 } from 'lucide-react';
+import AnimatedCounter from '../animations/AnimatedCounter';
+import { useStaggerFadeIn } from '../../animations/useStaggerFadeIn';
 
 export default function HospitalStatsCards({ stats }) {
   const activeRequests = stats?.activeRequests || 0;
   const totalRequests = stats?.totalRequests || 0;
   const unitsRequested = stats?.unitsRequested || 0;
   const unitsFulfilled = stats?.unitsFulfilled || 0;
+  
+  const staggerRef = useStaggerFadeIn(totalRequests);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div ref={staggerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       {/* Active Requests */}
       <Card variant="default" className="p-5 border border-slate-200">
         <div className="flex items-center justify-between mb-3">
@@ -19,7 +23,7 @@ export default function HospitalStatsCards({ stats }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{activeRequests}</span>
+          <AnimatedCounter value={activeRequests} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-brand-red font-bold">open & urgent</span>
         </div>
       </Card>
@@ -33,7 +37,7 @@ export default function HospitalStatsCards({ stats }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{totalRequests}</span>
+          <AnimatedCounter value={totalRequests} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-slate-500 font-medium">all-time requests</span>
         </div>
       </Card>
@@ -47,7 +51,7 @@ export default function HospitalStatsCards({ stats }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{unitsRequested}</span>
+          <AnimatedCounter value={unitsRequested} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-slate-500 font-medium">total blood units</span>
         </div>
       </Card>
@@ -61,7 +65,7 @@ export default function HospitalStatsCards({ stats }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{unitsFulfilled}</span>
+          <AnimatedCounter value={unitsFulfilled} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-emerald-600 font-bold">units received</span>
         </div>
       </Card>

@@ -2,15 +2,18 @@ import React from 'react';
 import Card from '../Card';
 import { Badge } from '../Badge';
 import { HeartPulse, Award, ShieldCheck, MapPin, Calendar } from 'lucide-react';
+import AnimatedCounter from '../animations/AnimatedCounter';
+import { useStaggerFadeIn } from '../../animations/useStaggerFadeIn';
 
 export default function DonorStatsCards({ profile, user }) {
   const totalDonations = profile?.totalDonationsCount || 0;
   const livesSaved = profile?.livesSavedCount || totalDonations * 3;
   const eligibility = profile?.eligibilityStatus || 'ELIGIBLE';
   const radius = profile?.preferredRadiusKm || 25;
+  const staggerRef = useStaggerFadeIn(totalDonations);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div ref={staggerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       {/* Total Donations */}
       <Card variant="default" className="p-5 border border-slate-200">
         <div className="flex items-center justify-between mb-3">
@@ -20,7 +23,7 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{totalDonations}</span>
+          <AnimatedCounter value={totalDonations} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-brand-slate font-medium">units donated</span>
         </div>
       </Card>
@@ -34,7 +37,7 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">~{livesSaved}</span>
+          <span className="text-3xl font-black text-brand-navy">~</span><AnimatedCounter value={livesSaved} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-emerald-700 font-bold">patients helped</span>
         </div>
       </Card>
@@ -64,7 +67,7 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{radius}</span>
+          <AnimatedCounter value={radius} className="text-3xl font-black text-brand-navy" />
           <span className="text-xs text-brand-slate font-medium">km coverage area</span>
         </div>
       </Card>

@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../Card';
 import { Badge } from '../Badge';
 import { HeartPulse, MapPin, ShieldCheck, Lock, CheckCircle2, Phone, Mail, UserCheck } from 'lucide-react';
+import SpringProgressRing from '../../animations/SpringProgressRing';
 
 export default function DonorMatchCard({ match, rank = 1 }) {
   const isConsentUnlocked = match.contactUnlocked || match.consentStatus === 'ACCEPTED';
@@ -65,12 +66,14 @@ export default function DonorMatchCard({ match, rank = 1 }) {
         </div>
 
         {/* Match Score Badge */}
-        <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1 p-3 bg-slate-50 rounded-2xl border border-slate-100">
-          <span className="text-[10px] uppercase font-bold text-slate-400">Match Score</span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-brand-navy">{match.matchScore}</span>
-            <span className="text-xs font-bold text-slate-400">/ 100</span>
-          </div>
+        <div className="flex sm:flex-col items-center sm:items-center justify-between gap-1 p-2 bg-slate-50 rounded-2xl border border-slate-100">
+          <span className="text-[9px] uppercase font-bold text-slate-400">Match Score</span>
+          <SpringProgressRing 
+            progress={match.matchScore} 
+            size={52} 
+            strokeWidth={5} 
+            color={match.matchScore >= 80 ? '#10B981' : match.matchScore >= 60 ? '#F59E0B' : '#DC2626'} 
+          />
         </div>
       </div>
 

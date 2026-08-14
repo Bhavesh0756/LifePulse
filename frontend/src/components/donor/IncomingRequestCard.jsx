@@ -6,6 +6,7 @@ import { donorService } from '../../services/donorService';
 import { Hospital, MapPin, Clock, ShieldCheck, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LockUnlockIcon from '../animations/LockUnlockIcon';
+import RadarPing from '../../animations/RadarPing';
 
 export default function IncomingRequestCard({ request }) {
   const [status, setStatus] = useState(request.consentStatus || 'NONE'); // NONE | ACCEPTED | DECLINED
@@ -106,11 +107,17 @@ export default function IncomingRequestCard({ request }) {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">
-          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${
-            isCritical ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-700'
-          }`}>
-            <Hospital className="w-6 h-6" />
-          </div>
+          {isCritical ? (
+            <RadarPing color="#E11D48" size={60}>
+              <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-rose-100 text-rose-600 relative z-10">
+                <Hospital className="w-6 h-6" />
+              </div>
+            </RadarPing>
+          ) : (
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-amber-100 text-amber-700">
+              <Hospital className="w-6 h-6" />
+            </div>
+          )}
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Badge variant={isCritical ? 'danger' : 'warning'}>
