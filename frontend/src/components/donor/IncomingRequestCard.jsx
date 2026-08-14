@@ -4,6 +4,8 @@ import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { donorService } from '../../services/donorService';
 import { Hospital, MapPin, Clock, ShieldCheck, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import LockUnlockIcon from '../animations/LockUnlockIcon';
 
 export default function IncomingRequestCard({ request }) {
   const [status, setStatus] = useState(request.consentStatus || 'NONE'); // NONE | ACCEPTED | DECLINED
@@ -48,12 +50,17 @@ export default function IncomingRequestCard({ request }) {
 
   if (status === 'ACCEPTED') {
     return (
-      <Card variant="elevated" className="p-6 border border-emerald-200 bg-emerald-50/50 relative">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <div className="flex-grow">
+      <motion.div
+        initial={{ filter: 'blur(8px)', opacity: 0, scale: 0.95 }}
+        animate={{ filter: 'blur(0px)', opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} // spring-like custom ease
+      >
+        <Card variant="elevated" className="p-6 border border-emerald-200 bg-emerald-50/50 relative">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm relative z-10">
+              <LockUnlockIcon isUnlocked={true} className="w-6 h-6" />
+            </div>
+            <div className="flex-grow">
             <div className="flex items-center gap-2 mb-2">
               <Badge variant="success">✓ ACCEPTED & CONNECTED</Badge>
               <span className="text-[11px] font-bold text-emerald-700">Consent Shared</span>
@@ -70,6 +77,7 @@ export default function IncomingRequestCard({ request }) {
           </div>
         </div>
       </Card>
+      </motion.div>
     );
   }
 
@@ -139,7 +147,7 @@ export default function IncomingRequestCard({ request }) {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
-          <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+          <LockUnlockIcon isUnlocked={false} className="w-4 h-4 text-emerald-500 shrink-0" />
           <span>Contact info hidden until explicit acceptance</span>
         </div>
 

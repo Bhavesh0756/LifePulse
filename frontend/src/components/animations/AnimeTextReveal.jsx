@@ -1,32 +1,39 @@
 import React, { useEffect, useRef } from 'react';
 import anime from 'animejs';
+import { useReducedMotion } from 'framer-motion';
 
 export default function AnimeTextReveal({ text, className = '' }) {
   const textRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!textRef.current) return;
+    if (!textRef.current || shouldReduceMotion) return;
     
+    const words = textRef.current.querySelectorAll('.word');
     anime.timeline({ loop: false })
       .add({
-        targets: textRef.current.querySelectorAll('.letter'),
-        translateY: [50, 0],
-        translateZ: 0,
+        targets: words,
+        translateY: [20, 0],
         opacity: [0, 1],
         easing: "easeOutExpo",
-        duration: 1200,
-        delay: (el, i) => 300 + 40 * i
+        duration: 800,
+        delay: anime.stagger(120, { start: 200 })
       });
-  }, []);
+      
+    return () => anime.remove(words);
+  }, [shouldReduceMotion]);
+
+  const words = text.split(' ');
 
   return (
     <span ref={textRef} className={`inline-block ${className}`}>
-      {text.split('').map((char, index) => (
-        char === ' ' ? (
-          <span key={index} className="letter inline-block opacity-0">&nbsp;</span>
-        ) : (
-          <span key={index} className="letter inline-block opacity-0 transform origin-bottom">{char}</span>
-        )
+      {words.map((word, index) => (
+        <span 
+          key={index} 
+          className={`word inline-block ${shouldReduceMotion ? 'opacity-100' : 'opacity-0'} mr-2`}
+        >
+          {word}
+        </span>
       ))}
     </span>
   );

@@ -1,7 +1,36 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import anime from 'animejs';
 
 export default function ECGPulse({ duration = 3.6, shouldReduceMotion = false }) {
+  const pathRef = useRef(null);
+  
+  useEffect(() => {
+    if (shouldReduceMotion || !pathRef.current) return;
+    
+    // Create an infinite loop timeline for the heartbeat line drawing itself
+    const timeline = anime.timeline({
+      loop: true,
+    });
+    
+    // Draw the path using strokeDashoffset and manipulate opacity for a smooth enter/exit
+    timeline.add({
+      targets: pathRef.current,
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutSine',
+      duration: (duration * 1000) * 0.45, // roughly 45% of the total duration to draw
+      delay: (duration * 1000) * 0.45,    // wait before drawing again
+      opacity: [
+        { value: [0, 1], duration: 300 },
+        { value: 1, duration: (duration * 1000) * 0.45 - 600 },
+        { value: 0, duration: 300 }
+      ]
+    });
+    
+    return () => {
+      anime.remove(pathRef.current);
+    }
+  }, [duration, shouldReduceMotion]);
+
   if (shouldReduceMotion) return null;
 
   const ecgPath = "M10 30 H50 L62 10 L75 52 L88 8 L98 30 H140";
@@ -18,30 +47,17 @@ export default function ECGPulse({ duration = 3.6, shouldReduceMotion = false })
             </feMerge>
           </filter>
         </defs>
-
-        {/* Animated Bright White Heartbeat Stroke */}
-        <motion.path
+        
+        {/* Animated Bright White Heartbeat Stroke using AnimeJS */}
+        <path
+          ref={pathRef}
           d={ecgPath}
           stroke="#FFFFFF"
           strokeWidth="3.5"
           strokeLinecap="round"
           strokeLinejoin="round"
           filter="url(#ecgFlashGlow)"
-          initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
-          animate={{
-            // 0s -> 1.9s (52.7%): dormant
-            // 1.9s -> 2.5s (52.7% - 69.4%): heartbeat pulse travels across drop
-            // 2.5s -> 3.6s: fade back to resting state
-            pathLength: [0, 0, 0.45, 0.45, 0],
-            pathOffset: [0, 0, 0, 0.55, 1],
-            opacity: [0, 0, 1, 1, 0],
-          }}
-          transition={{
-            duration: duration,
-            repeat: Infinity,
-            times: [0, 0.527, 0.585, 0.694, 0.760],
-            ease: "easeInOut",
-          }}
+          style={{ opacity: 0 }}
         />
       </svg>
     </div>

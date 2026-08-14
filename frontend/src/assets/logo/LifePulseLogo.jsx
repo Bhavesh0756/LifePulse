@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import anime from 'animejs';
+import { useReducedMotion } from 'framer-motion';
 
 export default function LifePulseLogo({ 
   className = "", 
   variant = "default", // default | light | iconOnly
   size = "md"          // sm | md | lg
 }) {
+  const logoRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (shouldReduceMotion || !logoRef.current) return;
+    
+    // Scale in animation on load, followed by a continuous heartbeat pulse
+    const tl = anime.timeline({
+      easing: 'easeOutElastic(1, .8)',
+    });
+    
+    tl.add({
+      targets: logoRef.current,
+      scale: [0, 1],
+      opacity: [0, 1],
+      duration: 1200,
+    }).add({
+      targets: logoRef.current,
+      scale: [1, 1.05],
+      duration: 1000,
+      easing: 'easeInOutSine',
+      direction: 'alternate',
+      loop: true
+    }, '-=200');
+    
+    return () => anime.remove(logoRef.current);
+  }, [shouldReduceMotion]);
+
   const iconSizes = {
     sm: "w-7 h-7",
     md: "w-9 h-9",
@@ -20,12 +50,16 @@ export default function LifePulseLogo({
   return (
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
       {/* Brand Icon Badge */}
-      <div className={`${iconSizes[size]} rounded-xl bg-gradient-to-br from-brand-red to-brand-crimson p-0.5 shadow-crimson-glow flex items-center justify-center relative overflow-hidden group`}>
+      <div 
+        ref={logoRef}
+        className={`${iconSizes[size]} rounded-xl bg-gradient-to-br from-brand-red to-brand-crimson p-0.5 shadow-crimson-glow flex items-center justify-center relative overflow-hidden group`}
+        style={!shouldReduceMotion ? { opacity: 0 } : {}}
+      >
         <svg 
           viewBox="0 0 32 32" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full p-1.5 text-white transform group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full p-1.5 text-white transition-transform duration-300"
         >
           {/* Blood drop silhouette */}
           <path 
