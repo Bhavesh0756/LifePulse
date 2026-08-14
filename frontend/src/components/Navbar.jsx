@@ -10,14 +10,31 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const [activeLink, setActiveLink] = useState('');
   const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+    
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      setActiveLink(hash ? `/${hash}` : (path === '/' ? '/#hero' : path));
+    };
+
+    handleLocationChange();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('popstate', handleLocationChange);
+    };
   }, []);
 
   const getPortalPath = () => {
@@ -38,11 +55,13 @@ export default function Navbar() {
       if (targetHash === '#hero') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         window.history.pushState(null, '', '/');
+        setActiveLink('/#hero');
       } else {
         const element = document.querySelector(targetHash);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
           window.history.pushState(null, '', targetHash);
+          setActiveLink('/' + targetHash);
         } else {
           window.location.href = href;
         }
@@ -63,17 +82,50 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-semibold text-brand-navy hover:text-brand-red transition-colors duration-200 cursor-pointer"
-              >
-                {link.name}
-              </a>
-            ))}
+          <div 
+            className="hidden lg:flex items-center p-1.5 rounded-full bg-[#081B3A]/[0.05] border border-[#081B3A]/10 backdrop-blur-[12px] shadow-sm"
+            onMouseLeave={() => setHoveredLink(null)}
+          >
+            {NAV_LINKS.map((link) => {
+              const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#hero');
+              const isHovered = hoveredLink === link.href;
+
+              return (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={() => setHoveredLink(link.href)}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 bg-[#E31E45] rounded-full shadow-sm"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      style={{ zIndex: 0 }}
+                    />
+                  )}
+                  
+                  {!isActive && isHovered && (
+                    <motion.div
+                      layoutId="nav-hover-pill"
+                      className="absolute inset-0 bg-white/70 rounded-full"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      style={{ zIndex: 0 }}
+                    />
+                  )}
+                  
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`relative z-10 block px-4 py-2 text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                      isActive ? 'text-white' : 'text-[#081B3A] hover:text-[#081B3A]'
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                </div>
+              );
+            })}
           </div>
 
           {/* Right Action CTAs */}

@@ -25,6 +25,7 @@ import Lenis from 'lenis';
 import { AnimatePresence } from 'framer-motion';
 import PageTransition from './animations/PageTransition';
 import { ToastProvider } from './context/ToastContext';
+import LifePulseCinematic from './animations/intro/LifePulseCinematic';
 
 export default function App() {
   const path = window.location.pathname;
@@ -125,6 +126,7 @@ export default function App() {
     <AuthProvider>
       <ToastProvider>
         <NotificationProvider>
+          <LifePulseCinematic />
           <AnimatePresence mode="wait">
             <PageTransition key={path}>
               {renderRoute()}
