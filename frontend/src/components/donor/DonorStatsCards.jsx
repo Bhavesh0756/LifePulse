@@ -1,9 +1,10 @@
 import React from 'react';
 import Card from '../Card';
 import { Badge } from '../Badge';
-import { HeartPulse, Award, ShieldCheck, MapPin, Calendar } from 'lucide-react';
+import AnimatedCounter from '../common/AnimatedCounter';
+import { HeartPulse, Award, ShieldCheck, MapPin } from 'lucide-react';
 
-export default function DonorStatsCards({ profile, user }) {
+export default function DonorStatsCards({ profile }) {
   const totalDonations = profile?.totalDonationsCount || 0;
   const livesSaved = profile?.livesSavedCount || totalDonations * 3;
   const eligibility = profile?.eligibilityStatus || 'ELIGIBLE';
@@ -20,7 +21,9 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{totalDonations}</span>
+          <span className="text-3xl font-black text-brand-navy">
+            <AnimatedCounter value={totalDonations} />
+          </span>
           <span className="text-xs text-brand-slate font-medium">units donated</span>
         </div>
       </Card>
@@ -34,7 +37,9 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">~{livesSaved}</span>
+          <span className="text-3xl font-black text-brand-navy">
+            ~<AnimatedCounter value={livesSaved} />
+          </span>
           <span className="text-xs text-emerald-700 font-bold">patients helped</span>
         </div>
       </Card>
@@ -64,7 +69,9 @@ export default function DonorStatsCards({ profile, user }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">{radius}</span>
+          <span className="text-3xl font-black text-brand-navy">
+            <AnimatedCounter value={radius} />
+          </span>
           <span className="text-xs text-brand-slate font-medium">km coverage area</span>
         </div>
       </Card>

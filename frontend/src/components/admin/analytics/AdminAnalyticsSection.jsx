@@ -4,17 +4,14 @@ import BloodGroupDemandChart from './BloodGroupDemandChart';
 import RequestTrendsChart from './RequestTrendsChart';
 import FulfillmentDonutChart from './FulfillmentDonutChart';
 import HospitalActivityTable from './HospitalActivityTable';
+import AnimatedCounter from '../../common/AnimatedCounter';
 import {
-  Activity,
   Users,
   Building2,
-  HeartPulse,
   Filter,
   RefreshCw,
   TrendingUp,
   ShieldCheck,
-  CheckCircle2,
-  AlertTriangle,
 } from 'lucide-react';
 
 const BLOOD_GROUPS = ['ALL', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -134,72 +131,72 @@ export default function AdminAnalyticsSection() {
       {/* KPI Cards — Preserving Organic Silhouette Shape (rounded-[40px_20px_48px_20px]) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Platform Fulfillment % */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-red-glow transition-all duration-300">
+        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
               <TrendingUp className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 uppercase">
-              {fulfillment.overallFulfillmentRate || 0}% RATE
+              <AnimatedCounter value={fulfillment.overallFulfillmentRate || 0} />% RATE
             </span>
           </div>
           <div className="mt-4">
             <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              {fulfillment.unitsFulfilled || 0} / {fulfillment.unitsRequested || 0}
+              <AnimatedCounter value={fulfillment.unitsFulfilled || 0} /> / <AnimatedCounter value={fulfillment.unitsRequested || 0} />
             </h4>
             <p className="text-xs font-bold text-slate-500 mt-0.5">Units Fulfilled vs Requested</p>
           </div>
         </div>
 
         {/* Card 2: Registered Donors */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-red-glow transition-all duration-300">
+        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
               <Users className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-black text-brand-navy bg-slate-100 px-2 py-0.5 rounded-full uppercase">
-              {donorStats.availableDonors || 0} AVAILABLE
+              <AnimatedCounter value={donorStats.availableDonors || 0} /> AVAILABLE
             </span>
           </div>
           <div className="mt-4">
             <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              {overview.totalDonors || 0}
+              <AnimatedCounter value={overview.totalDonors || 0} />
             </h4>
             <p className="text-xs font-bold text-slate-500 mt-0.5">Registered Blood Donors</p>
           </div>
         </div>
 
         {/* Card 3: Healthcare Hospitals */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-red-glow transition-all duration-300">
+        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
               <Building2 className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 uppercase">
-              {overview.verifiedHospitals || 0} VERIFIED
+              <AnimatedCounter value={overview.verifiedHospitals || 0} /> VERIFIED
             </span>
           </div>
           <div className="mt-4">
             <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              {overview.totalHospitals || 0}
+              <AnimatedCounter value={overview.totalHospitals || 0} />
             </h4>
             <p className="text-xs font-bold text-slate-500 mt-0.5">Healthcare Hospitals</p>
           </div>
         </div>
 
         {/* Card 4: Donor Consent Acceptance Rate */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-red-glow transition-all duration-300">
+        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-black text-brand-red bg-rose-50 px-2 py-0.5 rounded-full uppercase">
-              {donorStats.consentAcceptanceRate || 0}% ACCEPTED
+              <AnimatedCounter value={donorStats.consentAcceptanceRate || 0} />% ACCEPTED
             </span>
           </div>
           <div className="mt-4">
             <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              {donorStats.acceptedConsents || 0} / {donorStats.totalConsents || 0}
+              <AnimatedCounter value={donorStats.acceptedConsents || 0} /> / <AnimatedCounter value={donorStats.totalConsents || 0} />
             </h4>
             <p className="text-xs font-bold text-slate-500 mt-0.5">Stage 6 Donor Consents Granted</p>
           </div>

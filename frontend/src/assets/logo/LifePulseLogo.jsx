@@ -1,10 +1,13 @@
 import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function LifePulseLogo({ 
   className = "", 
   variant = "default", // default | light | iconOnly
   size = "md"          // sm | md | lg
 }) {
+  const shouldReduceMotion = useReducedMotion();
+
   const iconSizes = {
     sm: "w-7 h-7",
     md: "w-9 h-9",
@@ -19,8 +22,12 @@ export default function LifePulseLogo({
 
   return (
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Brand Icon Badge */}
-      <div className={`${iconSizes[size]} rounded-xl bg-gradient-to-br from-brand-red to-brand-crimson p-0.5 shadow-crimson-glow flex items-center justify-center relative overflow-hidden group`}>
+      {/* Brand Icon Badge with Subtle Breathing Pulse */}
+      <motion.div
+        animate={shouldReduceMotion ? {} : { scale: [1, 1.04, 1] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+        className={`${iconSizes[size]} rounded-xl bg-gradient-to-br from-brand-red to-brand-crimson p-0.5 shadow-crimson-glow flex items-center justify-center relative overflow-hidden group`}
+      >
         <svg 
           viewBox="0 0 32 32" 
           fill="none" 
@@ -45,7 +52,7 @@ export default function LifePulseLogo({
             strokeLinejoin="round"
           />
         </svg>
-      </div>
+      </motion.div>
 
       {/* Brand Text */}
       {variant !== "iconOnly" && (

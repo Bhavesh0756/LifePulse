@@ -1,6 +1,7 @@
 import React from 'react';
 import { SearchX, RefreshCw } from 'lucide-react';
 import { Button } from '../Button';
+import { motion } from 'framer-motion';
 
 export default function EmptyState({
   title = 'No records found',
@@ -10,7 +11,12 @@ export default function EmptyState({
   className = '',
 }) {
   return (
-    <div className={`py-12 px-4 text-center rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-3 antialiased ${className}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`py-12 px-4 text-center rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-3 antialiased ${className}`}
+    >
       <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 text-brand-red flex items-center justify-center mx-auto shadow-sm">
         <Icon className="w-6 h-6" />
       </div>
@@ -32,6 +38,6 @@ export default function EmptyState({
           </Button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

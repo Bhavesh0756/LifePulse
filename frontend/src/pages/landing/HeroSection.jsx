@@ -12,6 +12,14 @@ export default function HeroSection() {
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-red/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
 
+      {/* Signature Crimson Light Sweep — Runs ONCE during initial reveal */}
+      <motion.div
+        initial={{ x: '-100%', opacity: 0 }}
+        animate={{ x: '100%', opacity: [0, 0.35, 0] }}
+        transition={{ duration: 1.2, delay: 0.15, ease: 'easeInOut' }}
+        className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-brand-red/20 to-transparent skew-x-12 pointer-events-none z-20"
+      />
+
       <Container size="lg" className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Content */}
