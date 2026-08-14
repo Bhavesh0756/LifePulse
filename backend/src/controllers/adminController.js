@@ -178,17 +178,12 @@ const getHospitals = async (req, res) => {
  * @access  Private (ADMIN)
  */
 const verifyHospital = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
     const { id } = req.params;
     const { action, isVerified, notes } = req.body;
 
-    const hospitalProfile = await HospitalProfile.findById(id).session(session);
+    const hospitalProfile = await HospitalProfile.findById(id);
     if (!hospitalProfile) {
-      await session.abortTransaction();
-      session.endSession();
       return sendError(res, 404, 'Hospital profile not found.', 'NOT_FOUND');
     }
 
@@ -206,17 +201,13 @@ const verifyHospital = async (req, res) => {
     hospitalProfile.verificationNotes = verificationNotes;
     hospitalProfile.verifiedAt = now;
     hospitalProfile.verifiedBy = req.user._id;
-    await hospitalProfile.save({ session });
+    await hospitalProfile.save();
 
     // 2. Update User Account synchronously
     await User.findByIdAndUpdate(
       hospitalProfile.userId,
-      { $set: { isVerified: nextIsVerified } },
-      { session }
+      { $set: { isVerified: nextIsVerified } }
     );
-
-    await session.commitTransaction();
-    session.endSession();
 
     // Stage 8 Notification Dispatch
     (async () => {
@@ -255,8 +246,6 @@ const verifyHospital = async (req, res) => {
       }
     );
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     console.error('[Verify Hospital Error]:', error);
     return sendError(res, 500, 'Failed to update hospital verification status.', 'SERVER_ERROR');
   }
