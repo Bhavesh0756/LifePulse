@@ -91,4 +91,18 @@ export const authService = {
       credentials: 'include',
     });
   },
+
+  /**
+   * Update current authenticated user profile
+   */
+  async updateProfile(profileData) {
+    return safeFetch(`${API_BASE_URL}/auth/profile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(profileData),
+    });
+  },
 };

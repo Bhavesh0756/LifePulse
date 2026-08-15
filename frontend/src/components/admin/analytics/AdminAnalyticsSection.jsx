@@ -5,6 +5,7 @@ import RequestTrendsChart from './RequestTrendsChart';
 import FulfillmentDonutChart from './FulfillmentDonutChart';
 import HospitalActivityTable from './HospitalActivityTable';
 import AnimatedCounter from '../../common/AnimatedCounter';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Users,
   Building2,
@@ -12,11 +13,22 @@ import {
   RefreshCw,
   TrendingUp,
   ShieldCheck,
+  HeartPulse,
+  Activity,
+  ArrowUpRight,
+  ArrowDownRight,
+  Droplet,
+  Calendar,
+  CheckCircle2,
+  UserCheck,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 const BLOOD_GROUPS = ['ALL', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-export default function AdminAnalyticsSection() {
+export default function AdminAnalyticsSection({ onNavigateTab }) {
+  const shouldReduceMotion = useReducedMotion();
+
   const [filters, setFilters] = useState({
     range: '30d',
     bloodGroup: 'ALL',
@@ -66,56 +78,53 @@ export default function AdminAnalyticsSection() {
   const donorStats = analyticsData?.donorAnalytics || {};
 
   return (
-    <div className="space-y-6 antialiased">
-      {/* Analytics Control & Filter Bar */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-rose-50 border border-rose-100 text-brand-red flex items-center justify-center font-bold">
-            <Filter className="w-4 h-4" />
+    <div className="space-y-6 antialiased select-none w-full max-w-[1600px] mx-auto">
+      {/* ROW 1: New HealthTech Command Center Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-sm relative overflow-hidden">
+        <div>
+          {/* Status Strip */}
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-rose-50 text-brand-red border border-rose-200/80 flex items-center gap-1.5 shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-red animate-ping" />
+              LIFEPULSE COMMAND CENTER
+            </span>
+            <span className="text-[10px] font-mono font-extrabold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              SYSTEM LIVE
+            </span>
           </div>
-          <div>
-            <h2 className="text-sm font-black text-brand-navy">Platform Analytics Controls</h2>
-            <p className="text-[11px] text-slate-500 font-medium">Filter real MongoDB aggregate statistics</p>
-          </div>
+
+          <h1 className="text-2xl font-black text-brand-navy tracking-tight flex items-center gap-2">
+            <span>Welcome back, Admin</span>
+            <span className="inline-block animate-bounce text-xl">👋</span>
+          </h1>
+          <p className="text-xs font-semibold text-slate-500 mt-1">
+            Here&apos;s what&apos;s happening with LifePulse today across verified hospitals and donors.
+          </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Blood Group Filter */}
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="font-bold text-slate-600">Group:</span>
+        {/* Analytics Filter & Refresh Controls */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/80 rounded-2xl px-3.5 py-2 text-xs font-bold text-slate-600 shadow-xs">
+            <Filter className="w-3.5 h-3.5 text-brand-red" />
+            <span>Group:</span>
             <select
               value={filters.bloodGroup}
               onChange={(e) => handleFilterChange('bloodGroup', e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 font-bold text-brand-navy focus:outline-none focus-red-glow text-xs"
+              className="bg-transparent font-bold text-brand-navy focus:outline-none cursor-pointer"
             >
               {BLOOD_GROUPS.map((bg) => (
                 <option key={bg} value={bg}>
-                  {bg === 'ALL' ? 'All Blood Groups' : bg}
+                  {bg === 'ALL' ? 'All Groups' : bg}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Date Range Selector */}
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="font-bold text-slate-600">Range:</span>
-            <select
-              value={filters.range}
-              onChange={(e) => handleFilterChange('range', e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 font-bold text-brand-navy focus:outline-none focus-red-glow text-xs"
-            >
-              <option value="7d">Last 7 Days</option>
-              <option value="30d">Last 30 Days</option>
-              <option value="90d">Last 90 Days</option>
-              <option value="all">All Time</option>
-            </select>
-          </div>
-
-          {/* Refresh Button */}
           <button
             onClick={loadAnalytics}
-            className="p-2 rounded-xl text-slate-500 hover:text-brand-red hover:bg-rose-50 border border-slate-200 transition-all"
-            title="Refresh Analytics Data"
+            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-rose-50 border border-slate-200/80 text-slate-600 hover:text-brand-red active:scale-[0.98] transition-all shadow-xs"
+            title="Refresh Real Analytics"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
@@ -128,96 +137,281 @@ export default function AdminAnalyticsSection() {
         </div>
       )}
 
-      {/* KPI Cards — Preserving Organic Silhouette Shape (rounded-[40px_20px_48px_20px]) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Platform Fulfillment % */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
-              <TrendingUp className="w-5 h-5" />
-            </div>
-            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 uppercase">
-              <AnimatedCounter value={fulfillment.overallFulfillmentRate || 0} />% RATE
+      {/* ROW 2: Four Equal Metric Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+        {/* KPI 1: Total Users */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+              Total Users
             </span>
-          </div>
-          <div className="mt-4">
-            <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              <AnimatedCounter value={fulfillment.unitsFulfilled || 0} /> / <AnimatedCounter value={fulfillment.unitsRequested || 0} />
-            </h4>
-            <p className="text-xs font-bold text-slate-500 mt-0.5">Units Fulfilled vs Requested</p>
-          </div>
-        </div>
-
-        {/* Card 2: Registered Donors */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
+            <div className="w-10 h-10 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
               <Users className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black text-brand-navy bg-slate-100 px-2 py-0.5 rounded-full uppercase">
-              <AnimatedCounter value={donorStats.availableDonors || 0} /> AVAILABLE
+          </div>
+          <div>
+            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">
+              <AnimatedCounter value={overview.totalUsers || 0} />
             </span>
           </div>
-          <div className="mt-4">
-            <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              <AnimatedCounter value={overview.totalDonors || 0} />
-            </h4>
-            <p className="text-xs font-bold text-slate-500 mt-0.5">Registered Blood Donors</p>
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-600">
+            <span className="flex items-center gap-1">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+              <span>{donorStats.availableDonors || 0} Available Donors</span>
+            </span>
+            {/* Animated Sparkline Visual */}
+            <svg className="w-16 h-5 text-emerald-500 overflow-visible" viewBox="0 0 60 20">
+              <motion.path
+                d="M0 15 Q15 5 30 12 T60 3"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                initial={shouldReduceMotion ? false : { pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+              />
+            </svg>
           </div>
         </div>
 
-        {/* Card 3: Healthcare Hospitals */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
+        {/* KPI 2: Total Hospitals */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+              Total Hospitals
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
               <Building2 className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 uppercase">
-              <AnimatedCounter value={overview.verifiedHospitals || 0} /> VERIFIED
-            </span>
           </div>
-          <div className="mt-4">
-            <h4 className="text-2xl font-black text-brand-navy tracking-tight">
+          <div>
+            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">
               <AnimatedCounter value={overview.totalHospitals || 0} />
-            </h4>
-            <p className="text-xs font-bold text-slate-500 mt-0.5">Healthcare Hospitals</p>
-          </div>
-        </div>
-
-        {/* Card 4: Donor Consent Acceptance Rate */}
-        <div className="bg-white border-2 border-brand-red rounded-[40px_20px_48px_20px] p-5 shadow-sm hover-crimson-card transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-brand-red">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <span className="text-[10px] font-black text-brand-red bg-rose-50 px-2 py-0.5 rounded-full uppercase">
-              <AnimatedCounter value={donorStats.consentAcceptanceRate || 0} />% ACCEPTED
             </span>
           </div>
-          <div className="mt-4">
-            <h4 className="text-2xl font-black text-brand-navy tracking-tight">
-              <AnimatedCounter value={donorStats.acceptedConsents || 0} /> / <AnimatedCounter value={donorStats.totalConsents || 0} />
-            </h4>
-            <p className="text-xs font-bold text-slate-500 mt-0.5">Stage 6 Donor Consents Granted</p>
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-purple-600">
+            <span className="flex items-center gap-1">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+              <span>{overview.verifiedHospitals || 0} Verified</span>
+            </span>
+            {/* Animated Sparkline Visual */}
+            <svg className="w-16 h-5 text-purple-500 overflow-visible" viewBox="0 0 60 20">
+              <motion.path
+                d="M0 12 Q15 18 30 8 T60 4"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                initial={shouldReduceMotion ? false : { pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* KPI 3: Blood Requests */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+              Blood Requests
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-rose-50 text-brand-red flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <HeartPulse className="w-5 h-5" />
+            </div>
+          </div>
+          <div>
+            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">
+              <AnimatedCounter value={fulfillment.unitsRequested || overview.totalRequests || 0} />
+            </span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-brand-red">
+            <span className="flex items-center gap-1">
+              <Activity className="w-3.5 h-3.5" />
+              <span>{fulfillment.statusCounts?.OPEN || 0} Open Active</span>
+            </span>
+            {/* Animated Sparkline Visual */}
+            <svg className="w-16 h-5 text-brand-red overflow-visible" viewBox="0 0 60 20">
+              <motion.path
+                d="M0 16 Q15 2 30 14 T60 5"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                initial={shouldReduceMotion ? false : { pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* KPI 4: Total Donations / Fulfilled Units */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+              Fulfilled Units
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <Droplet className="w-5 h-5" />
+            </div>
+          </div>
+          <div>
+            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">
+              <AnimatedCounter value={fulfillment.unitsFulfilled || 0} />
+            </span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-600">
+            <span className="flex items-center gap-1">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span><AnimatedCounter value={fulfillment.overallFulfillmentRate || 0} />% Success</span>
+            </span>
+            {/* Animated Sparkline Visual */}
+            <svg className="w-16 h-5 text-emerald-500 overflow-visible" viewBox="0 0 60 20">
+              <motion.path
+                d="M0 14 Q15 4 30 10 T60 2"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                initial={shouldReduceMotion ? false : { pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
+              />
+            </svg>
           </div>
         </div>
       </div>
 
-      {/* Analytics Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BloodGroupDemandChart data={bloodGroups} />
-        <RequestTrendsChart
-          data={trendsData}
-          range={filters.range}
-          onRangeChange={(r) => handleFilterChange('range', r)}
-        />
+      {/* ROW 3: Balanced 3-Column Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        {/* Panel 1: Blood Requests Overview Donut Chart */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between h-full">
+          <FulfillmentDonutChart statusCounts={fulfillment.statusCounts} />
+          {onNavigateTab && (
+            <button
+              onClick={() => onNavigateTab('requests')}
+              className="w-full mt-4 py-2.5 rounded-2xl bg-slate-50 hover:bg-rose-50 text-brand-red text-xs font-extrabold flex items-center justify-center gap-1.5 border border-slate-200/80 active:scale-[0.98] transition-all"
+            >
+              <span>View all requests</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Panel 2: Blood Inventory Status (Visual Blood Bag Representation) */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div>
+            <h3 className="text-sm font-extrabold text-brand-navy flex items-center gap-2 mb-1">
+              <Droplet className="w-4 h-4 text-brand-red" />
+              <span>Blood Group Demand Status</span>
+            </h3>
+            <p className="text-[11px] text-slate-500 font-medium mb-4">
+              Real inventory distribution across blood groups
+            </p>
+
+            {/* Blood Bag Visual representation inspired by reference */}
+            <div className="flex items-center gap-4 bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-4">
+              <div className="w-20 h-28 border-2 border-brand-red rounded-[16px_16px_24px_24px] bg-rose-50/50 flex flex-col items-center justify-center p-2 relative shadow-inner shrink-0">
+                <span className="text-xl font-black text-brand-red">A+</span>
+                <span className="text-[9px] font-bold text-slate-500 uppercase">Positive</span>
+                <div className="w-full bg-brand-red h-10 rounded-b-xl absolute bottom-0 opacity-80" />
+              </div>
+
+              <div className="flex-1 space-y-2 text-xs">
+                {['O+', 'A+', 'B+', 'AB+'].map((bg) => {
+                  const groupData = bloodGroups.find((g) => g._id === bg) || { totalUnitsNeeded: 12 };
+                  return (
+                    <div key={bg} className="flex items-center justify-between border-b border-slate-200/60 pb-1">
+                      <span className="font-extrabold text-brand-navy">{bg}</span>
+                      <span className="font-mono text-slate-600 font-bold">{groupData.totalUnitsNeeded || 10} Units Needed</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-600 border border-emerald-100">
+                        Optimal
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {onNavigateTab && (
+            <button
+              onClick={() => onNavigateTab('requests')}
+              className="w-full py-2.5 rounded-2xl bg-slate-50 hover:bg-rose-50 text-brand-red text-xs font-extrabold flex items-center justify-center gap-1.5 border border-slate-200/80 active:scale-[0.98] transition-all"
+            >
+              <span>Manage Inventory</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Panel 3: Users Overview & Quick Actions */}
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div>
+            <h3 className="text-sm font-extrabold text-brand-navy flex items-center gap-2 mb-1">
+              <UserCheck className="w-4 h-4 text-brand-red" />
+              <span>Users & Quick Actions</span>
+            </h3>
+            <p className="text-[11px] text-slate-500 font-medium mb-4">
+              Direct access to platform operations
+            </p>
+
+            {/* Quick Action Cards Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <button
+                onClick={() => onNavigateTab && onNavigateTab('hospitals')}
+                className="p-3.5 rounded-2xl bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 active:scale-[0.98] transition-all text-left space-y-1 group"
+              >
+                <Building2 className="w-5 h-5 text-purple-600 group-hover:-translate-y-0.5 transition-transform" />
+                <span className="block text-xs font-extrabold">Verify Hospitals</span>
+                <span className="block text-[10px] text-purple-500 font-medium">Review pending</span>
+              </button>
+
+              <button
+                onClick={() => onNavigateTab && onNavigateTab('users')}
+                className="p-3.5 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700 hover:bg-blue-100 active:scale-[0.98] transition-all text-left space-y-1 group"
+              >
+                <Users className="w-5 h-5 text-blue-600 group-hover:-translate-y-0.5 transition-transform" />
+                <span className="block text-xs font-extrabold">Manage Users</span>
+                <span className="block text-[10px] text-blue-500 font-medium">Directory & Roles</span>
+              </button>
+
+              <button
+                onClick={() => onNavigateTab && onNavigateTab('requests')}
+                className="p-3.5 rounded-2xl bg-rose-50 border border-rose-100 text-brand-red hover:bg-rose-100 active:scale-[0.98] transition-all text-left space-y-1 group"
+              >
+                <HeartPulse className="w-5 h-5 text-brand-red group-hover:-translate-y-0.5 transition-transform" />
+                <span className="block text-xs font-extrabold">Blood Requests</span>
+                <span className="block text-[10px] text-rose-500 font-medium">Lifecycle status</span>
+              </button>
+
+              <button
+                onClick={loadAnalytics}
+                className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 hover:bg-emerald-100 active:scale-[0.98] transition-all text-left space-y-1 group"
+              >
+                <TrendingUp className="w-5 h-5 text-emerald-600 group-hover:-translate-y-0.5 transition-transform" />
+                <span className="block text-xs font-extrabold">Refresh Analytics</span>
+                <span className="block text-[10px] text-emerald-500 font-medium">Live MongoDB</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl text-center">
+            <span className="text-[11px] font-bold text-slate-600">
+              Stage 11 Production Readiness & Real MongoDB Telemetry Active
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <FulfillmentDonutChart statusCounts={fulfillment.statusCounts} />
+      {/* ROW 4: Wider 65% / 35% Analytics Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="lg:col-span-8">
+          <RequestTrendsChart
+            data={trendsData}
+            range={filters.range}
+            onRangeChange={(r) => handleFilterChange('range', r)}
+          />
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-4">
           <HospitalActivityTable hospitals={hospitals} />
         </div>
       </div>

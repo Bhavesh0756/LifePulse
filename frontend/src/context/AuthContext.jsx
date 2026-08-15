@@ -66,6 +66,16 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Update Profile handler
+  const updateUserProfile = async (profileData) => {
+    const res = await authService.updateProfile(profileData);
+    if (res.success && res.data.user) {
+      setUser(res.data.user);
+      return res.data.user;
+    }
+    return null;
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
@@ -73,6 +83,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    updateUserProfile,
     hasRole: (requiredRole) => user?.role === requiredRole,
   };
 

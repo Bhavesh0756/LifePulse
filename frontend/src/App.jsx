@@ -15,8 +15,9 @@ import RequestDetailPage from './pages/hospital/RequestDetailPage';
 import BloodRequestsListPage from './pages/hospital/BloodRequestsListPage';
 import HospitalProfilePage from './pages/hospital/HospitalProfilePage';
 
-// Admin Portal Page
+// Admin Portal Pages
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminProfilePage from './pages/admin/AdminProfilePage';
 
 // Protected Route Guard
 import { ProtectedRoute } from './routes/ProtectedRoute';
@@ -106,6 +107,13 @@ export default function App() {
     }
 
     // Admin Routes
+    if (path === '/admin/profile') {
+      return (
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminProfilePage />
+        </ProtectedRoute>
+      );
+    }
     if (path.startsWith('/admin')) {
       return (
         <ProtectedRoute allowedRoles={['ADMIN']}>
