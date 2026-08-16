@@ -1,0 +1,284 @@
+warning: in the working copy of 'frontend/src/components/donor/DonorStatsCards.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/hospital/HospitalOverviewStrip.jsx', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/frontend/src/components/admin/analytics/AdminAnalyticsSection.jsx b/frontend/src/components/admin/analytics/AdminAnalyticsSection.jsx[m
+[1mindex 2fbb4dc..b9294d4 100644[m
+[1m--- a/frontend/src/components/admin/analytics/AdminAnalyticsSection.jsx[m
+[1m+++ b/frontend/src/components/admin/analytics/AdminAnalyticsSection.jsx[m
+[36m@@ -5,6 +5,7 @@[m [mimport RequestTrendsChart from './RequestTrendsChart';[m
+ import FulfillmentDonutChart from './FulfillmentDonutChart';[m
+ import HospitalActivityTable from './HospitalActivityTable';[m
+ import AnimatedCounter from '../../common/AnimatedCounter';[m
+[32m+[m[32mimport FloatingStatCluster from '../../common/FloatingStatCluster';[m
+ import { motion, useReducedMotion } from 'framer-motion';[m
+ import {[m
+   Users,[m
+[36m@@ -137,148 +138,53 @@[m [mexport default function AdminAnalyticsSection({ onNavigateTab }) {[m
+         </div>[m
+       )}[m
+ [m
+[31m-      {/* ROW 2: Four Equal Metric Cards Grid */}[m
+[31m-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">[m
+[31m-        {/* KPI 1: Total Users */}[m
+[31m-        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">[m
+[31m-          <div className="flex items-center justify-between mb-2">[m
+[31m-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">[m
+[31m-              Total Users[m
+[31m-            </span>[m
+[31m-            <div className="w-10 h-10 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">[m
+[31m-              <Users className="w-5 h-5" />[m
+[31m-            </div>[m
+[31m-          </div>[m
+[31m-          <div>[m
+[31m-            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">[m
+[31m-              <AnimatedCounter value={overview.totalUsers || 0} />[m
+[31m-            </span>[m
+[31m-          </div>[m
+[31m-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-600">[m
+[31m-            <span className="flex items-center gap-1">[m
+[31m-              <ArrowUpRight className="w-3.5 h-3.5" />[m
+[31m-              <span>{donorStats.availableDonors || 0} Available Donors</span>[m
+[31m-            </span>[m
+[31m-            {/* Animated Sparkline Visual */}[m
+[31m-            <svg className="w-16 h-5 text-emerald-500 overflow-visible" viewBox="0 0 60 20">[m
+[31m-              <motion.path[m
+[31m-                d="M0 15 Q15 5 30 12 T60 3"[m
+[31m-                stroke="currentColor"[m
+[31m-                strokeWidth="2"[m
+[31m-                fill="none"[m
+[31m-                initial={shouldReduceMotion ? false : { pathLength: 0 }}[m
+[31m-                animate={{ pathLength: 1 }}[m
+[31m-                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}[m
+[31m-              />[m
+[31m-            </svg>[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-[m
+[31m-        {/* KPI 2: Total Hospitals */}[m
+[31m-        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">[m
+[31m-          <div className="flex items-center justify-between mb-2">[m
+[31m-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">[m
+[31m-              Total Hospitals[m
+[31m-            </span>[m
+[31m-            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">[m
+[31m-              <Building2 className="w-5 h-5" />[m
+[31m-            </div>[m
+[31m-          </div>[m
+[31m-          <div>[m
+[31m-            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">[m
+[31m-              <AnimatedCounter value={overview.totalHospitals || 0} />[m
+[31m-            </span>[m
+[31m-          </div>[m
+[31m-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-purple-600">[m
+[31m-            <span className="flex items-center gap-1">[m
+[31m-              <ArrowUpRight className="w-3.5 h-3.5" />[m
+[31m-              <span>{overview.verifiedHospitals || 0} Verified</span>[m
+[31m-            </span>[m
+[31m-            {/* Animated Sparkline Visual */}[m
+[31m-            <svg className="w-16 h-5 text-purple-500 overflow-visible" viewBox="0 0 60 20">[m
+[31m-              <motion.path[m
+[31m-                d="M0 12 Q15 18 30 8 T60 4"[m
+[31m-                stroke="currentColor"[m
+[31m-                strokeWidth="2"[m
+[31m-                fill="none"[m
+[31m-                initial={shouldReduceMotion ? false : { pathLength: 0 }}[m
+[31m-                animate={{ pathLength: 1 }}[m
+[31m-                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}[m
+[31m-              />[m
+[31m-            </svg>[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-[m
+[31m-        {/* KPI 3: Blood Requests */}[m
+[31m-        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">[m
+[31m-          <div className="flex items-center justify-between mb-2">[m
+[31m-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">[m
+[31m-              Blood Requests[m
+[31m-            </span>[m
+[31m-            <div className="w-10 h-10 rounded-2xl bg-rose-50 text-brand-red flex items-center justify-center font-bold group-hover:scale-105 transition-transform">[m
+[31m-              <HeartPulse className="w-5 h-5" />[m
+[31m-            </div>[m
+[31m-          </div>[m
+[31m-          <div>[m
+[31m-            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">[m
+[31m-              <AnimatedCounter value={fulfillment.unitsRequested || overview.totalRequests || 0} />[m
+[31m-            </span>[m
+[31m-          </div>[m
+[31m-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-brand-red">[m
+[31m-            <span className="flex items-center gap-1">[m
+[31m-              <Activity className="w-3.5 h-3.5" />[m
+[31m-              <span>{fulfillment.statusCounts?.OPEN || 0} Open Active</span>[m
+[31m-            </span>[m
+[31m-            {/* Animated Sparkline Visual */}[m
+[31m-            <svg className="w-16 h-5 text-brand-red overflow-visible" viewBox="0 0 60 20">[m
+[31m-              <motion.path[m
+[31m-                d="M0 16 Q15 2 30 14 T60 5"[m
+[31m-                stroke="currentColor"[m
+[31m-                strokeWidth="2"[m
+[31m-                fill="none"[m
+[31m-                initial={shouldReduceMotion ? false : { pathLength: 0 }}[m
+[31m-                animate={{ pathLength: 1 }}[m
+[31m-                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}[m
+[31m-              />[m
+[31m-            </svg>[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-[m
+[31m-        {/* KPI 4: Total Donations / Fulfilled Units */}[m
+[31m-        <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full group">[m
+[31m-          <div className="flex items-center justify-between mb-2">[m
+[31m-            <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">[m
+[31m-              Fulfilled Units[m
+[31m-            </span>[m
+[31m-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">[m
+[31m-              <Droplet className="w-5 h-5" />[m
+[31m-            </div>[m
+[31m-          </div>[m
+[31m-          <div>[m
+[31m-            <span className="text-3xl font-black font-mono text-brand-navy tracking-tight">[m
+[31m-              <AnimatedCounter value={fulfillment.unitsFulfilled || 0} />[m
+[31m-            </span>[m
+[31m-          </div>[m
+[31m-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-600">[m
+[31m-            <span className="flex items-center gap-1">[m
+[31m-              <TrendingUp className="w-3.5 h-3.5" />[m
+[31m-              <span><AnimatedCounter value={fulfillment.overallFulfillmentRate || 0} />% Success</span>[m
+[31m-            </span>[m
+[31m-            {/* Animated Sparkline Visual */}[m
+[31m-            <svg className="w-16 h-5 text-emerald-500 overflow-visible" viewBox="0 0 60 20">[m
+[31m-              <motion.path[m
+[31m-                d="M0 14 Q15 4 30 10 T60 2"[m
+[31m-                stroke="currentColor"[m
+[31m-                strokeWidth="2"[m
+[31m-                fill="none"[m
+[31m-                initial={shouldReduceMotion ? false : { pathLength: 0 }}[m
+[31m-                animate={{ pathLength: 1 }}[m
+[31m-                transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}[m
+[31m-              />[m
+[31m-            </svg>[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-      </div>[m
+[32m+[m[32m      {/* ROW 2: Floating Statistic Cards */}[m
+[32m+[m[32m      <FloatingStatCluster cards={[[m
+[32m+[m[32m        {[m
+[32m+[m[32m          id: 'total_hospitals',[m
+[32m+[m[32m          label: 'TOTAL HOSPITALS',[m
+[32m+[m[32m          value: overview.totalHospitals || 0,[m
+[32m+[m[32m          subtext: `${overview.verifiedHospitals || 0} Verified`,[m
+[32m+[m[32m          icon: Building2,[m
+[32m+[m[32m          iconColor: 'text-purple-600',[m
+[32m+[m[32m          backplateBg: 'bg-purple-200',[m
+[32m+[m[32m          desktopClasses: 'lg:z-10 lg:-rotate-2 lg:-translate-y-2',[m
+[32m+[m[32m          isFocal: false,[m
+[32m+[m[32m        },[m
+[32m+[m[32m        {[m
+[32m+[m[32m          id: 'total_users',[m
+[32m+[m[32m          label: 'TOTAL USERS',[m
+[32m+[m[32m          value: overview.totalUsers || 0,[m
+[32m+[m[32m          subtext: `${donorStats.availableDonors || 0} Donors`,[m
+[32m+[m[32m          icon: Users,[m
+[32m+[m[32m          iconColor: 'text-brand-red',[m
+[32m+[m[32m          backplateBg: 'bg-rose-200',[m
+[32m+[m[32m          desktopClasses: 'lg:z-30 lg:rotate-1 lg:scale-105',[m
+[32m+[m[32m          isFocal: true,[m
+[32m+[m[32m        },[m
+[32m+[m[32m        {[m
+[32m+[m[32m          id: 'blood_requests',[m
+[32m+[m[32m          label: 'BLOOD REQUESTS',[m
+[32m+[m[32m          value: fulfillment.unitsRequested || overview.totalRequests || 0,[m
+[32m+[m[32m          subtext: `${fulfillment.statusCounts?.OPEN || 0} Active`,[m
+[32m+[m[32m          icon: HeartPulse,[m
+[32m+[m[32m          iconColor: 'text-brand-navy',[m
+[32m+[m[32m          backplateBg: 'bg-blue-200',[m
+[32m+[m[32m          desktopClasses: 'lg:z-20 lg:rotate-2 lg:-translate-y-1',[m
+[32m+[m[32m          isFocal: false,[m
+[32m+[m[32m        },[m
+[32m+[m[32m        {[m
+[32m+[m[32m          id: 'fulfilled_units',[m
+[32m+[m[32m          label: 'FULFILLED UNITS',[m
+[32m+[m[32m          value: fulfillment.unitsFulfilled || 0,[m
+[32m+[m[32m          subtext: `${fulfillment.overallFulfillmentRate || 0}% Success`,[m
+[32m+[m[32m          icon: Droplet,[m
+[32m+[m[32m          iconColor: 'text-emerald-600',[m
+[32m+[m[32m          backplateBg: 'bg-emerald-200',[m
+[32m+[m[32m          desktopClasses: 'lg:z-10 lg:-rotate-2 lg:translate-y-2',[m
+[32m+[m[32m          isFocal: false,[m
+[32m+[m[32m        },[m
+[32m+[m[32m      ]} />[m
+ [m
+       {/* ROW 3: Balanced 3-Column Grid */}[m
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">[m
+[1mdiff --git a/frontend/src/components/donor/DonorStatsCards.jsx b/frontend/src/components/donor/DonorStatsCards.jsx[m
+[1mindex 48697a1..77c251b 100644[m
+[1m--- a/frontend/src/components/donor/DonorStatsCards.jsx[m
+[1m+++ b/frontend/src/components/donor/DonorStatsCards.jsx[m
+[36m@@ -1,135 +1,64 @@[m
+ import React from 'react';[m
+[31m-import AnimatedCounter from '../common/AnimatedCounter';[m
+ import { HeartPulse, Award, ShieldCheck, MapPin } from 'lucide-react';[m
+[31m-import { motion, useReducedMotion } from 'framer-motion';[m
+[32m+[m[32mimport FloatingStatCluster from '../common/FloatingStatCluster';[m
+ [m
+ export default function DonorStatsCards({ profile, historyCount = 0 }) {[m
+[31m-  const shouldReduceMotion = useReducedMotion();[m
+[31m-[m
+   const totalDonations = profile?.totalDonationsCount !== undefined ? profile.totalDonationsCount : (historyCount || 1);[m
+   const livesSaved = profile?.livesSavedCount || totalDonations * 3;[m
+   const eligibility = profile?.eligibilityStatus || 'ELIGIBLE';[m
+   const radius = profile?.preferredRadiusKm || 25;[m
+ [m
+[31m-  const cardVariants = {[m
+[31m-    hidden: { opacity: 0, y: 15 },[m
+[31m-    visible: (i) => ({[m
+[31m-      opacity: 1,[m
+[31m-      y: 0,[m
+[31m-      transition: {[m
+[31m-        delay: shouldReduceMotion ? 0 : i * 0.1,[m
+[31m-        duration: 0.4,[m
+[31m-        ease: 'easeOut',[m
+[31m-      },[m
+[31m-    }),[m
+[31m-  };[m
+[31m-[m
+[31m-  return ([m
+[31m-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">[m
+[31m-      {/* 1. TOTAL DONATIONS */}[m
+[31m-      <motion.div[m
+[31m-        custom={0}[m
+[31m-        initial="hidden"[m
+[31m-        animate="visible"[m
+[31m-        variants={cardVariants}[m
+[31m-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"[m
+[31m-      >[m
+[31m-        <div className="flex items-center justify-between mb-3">[m
+[31m-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">[m
+[31m-            Total Donations[m
+[31m-          </span>[m
+[31m-          <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100/80 text-brand-red flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">[m
+[31m-            <HeartPulse className="w-5 h-5" />[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-        <div>[m
+[31m-          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight">[m
+[31m-            <AnimatedCounter value={totalDonations} />[m
+[31m-          </div>[m
+[31m-          <span className="text-xs sm:text-sm text-slate-500 font-medium mt-1 block">[m
+[31m-            Units Contributed[m
+[31m-          </span>[m
+[31m-        </div>[m
+[31m-      </motion.div>[m
+[31m-[m
+[31m-      {/* 2. LIVES SAVED */}[m
+[31m-      <motion.div[m
+[31m-        custom={1}[m
+[31m-        initial="hidden"[m
+[31m-        animate="visible"[m
+[31m-        variants={cardVariants}[m
+[31m-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"[m
+[31m-      >[m
+[31m-        <div className="flex items-center justify-between mb-3">[m
+[31m-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">[m
+[31m-            Lives Saved[m
+[31m-          </span>[m
+[31m-          <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100/80 text-emerald-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">[m
+[31m-            <Award className="w-
