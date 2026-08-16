@@ -164,9 +164,37 @@ const getMe = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Update Current Authenticated User's Profile
+ * @route   PUT /api/auth/profile
+ * @access  Private
+ */
+const updateProfile = async (req, res) => {
+  try {
+    const { name, phone, bloodGroup } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return sendError(res, 404, 'User account not found.', 'USER_NOT_FOUND');
+    }
+
+    if (name !== undefined && name.trim()) user.name = name.trim();
+    if (phone !== undefined && phone.trim()) user.phone = phone.trim();
+    if (bloodGroup !== undefined && user.role === ROLES.DONOR) user.bloodGroup = bloodGroup;
+
+    await user.save();
+
+    return sendSuccess(res, 200, 'Profile updated successfully', {
+      user: user.toSafeObject(),
+    });
+  } catch (error) {
+    console.error('[Auth Update Profile Error]:', error);
+    return sendError(res, 500, 'Unable to update user profile.', 'SERVER_ERROR');
+  }
+};
 module.exports = {
   register,
   login,
   logout,
   getMe,
+  updateProfile,
 };

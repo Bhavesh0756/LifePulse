@@ -7,6 +7,11 @@ import RegisterPage from './pages/auth/RegisterPage';
 
 // Donor Portal Pages
 import DonorDashboardPage from './pages/donor/DonorDashboardPage';
+import DonorRequestsPage from './pages/donor/DonorRequestsPage';
+import DonorProfilePage from './pages/donor/DonorProfilePage';
+import DonorHistoryPage from './pages/donor/DonorHistoryPage';
+import DonorBadgesPage from './pages/donor/DonorBadgesPage';
+import DonorSettingsPage from './pages/donor/DonorSettingsPage';
 
 // Hospital Portal Pages
 import HospitalDashboardPage from './pages/hospital/HospitalDashboardPage';
@@ -15,16 +20,16 @@ import RequestDetailPage from './pages/hospital/RequestDetailPage';
 import BloodRequestsListPage from './pages/hospital/BloodRequestsListPage';
 import HospitalProfilePage from './pages/hospital/HospitalProfilePage';
 
-// Admin Portal Page
+// Admin Portal Pages
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminProfilePage from './pages/admin/AdminProfilePage';
 
 // Protected Route Guard
 import { ProtectedRoute } from './routes/ProtectedRoute';
 
 import Lenis from 'lenis';
 import { AnimatePresence } from 'framer-motion';
-import PageTransition from './animations/PageTransition';
-import { ToastProvider } from './context/ToastContext';
+import PageTransition from './components/common/PageTransition';
 import LifePulseCinematic from './animations/intro/LifePulseCinematic';
 
 export default function App() {
@@ -63,7 +68,42 @@ export default function App() {
     if (path === '/login') return <LoginPage />;
     if (path === '/register') return <RegisterPage />;
 
-    // Donor Routes
+    // Donor Dedicated Routes
+    if (path === '/donor/requests') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorRequestsPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/profile') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorProfilePage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/history') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorHistoryPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/badges') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorBadgesPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/settings') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorSettingsPage />
+        </ProtectedRoute>
+      );
+    }
     if (path.startsWith('/donor')) {
       return (
         <ProtectedRoute allowedRoles={['DONOR']}>
@@ -94,7 +134,7 @@ export default function App() {
         </ProtectedRoute>
       );
     }
-    if (path === '/hospital/profile') {
+    if (path === '/hospital/settings' || path === '/hospital/profile') {
       return (
         <ProtectedRoute allowedRoles={['HOSPITAL']}>
           <HospitalProfilePage />
@@ -110,6 +150,13 @@ export default function App() {
     }
 
     // Admin Routes
+    if (path === '/admin/profile') {
+      return (
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminProfilePage />
+        </ProtectedRoute>
+      );
+    }
     if (path.startsWith('/admin')) {
       return (
         <ProtectedRoute allowedRoles={['ADMIN']}>
@@ -124,7 +171,6 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <ToastProvider>
         <NotificationProvider>
           <LifePulseCinematic />
           <AnimatePresence mode="wait">
@@ -133,7 +179,6 @@ export default function App() {
             </PageTransition>
           </AnimatePresence>
         </NotificationProvider>
-      </ToastProvider>
     </AuthProvider>
   );
 }

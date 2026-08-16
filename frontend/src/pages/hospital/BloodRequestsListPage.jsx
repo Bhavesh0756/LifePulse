@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { hospitalService } from '../../services/hospitalService';
 import HospitalHeader from '../../components/hospital/HospitalHeader';
+import HospitalSidebar from '../../components/hospital/HospitalSidebar';
 import RequestCard from '../../components/hospital/RequestCard';
-import Container from '../../components/Container';
+import SoftBlushWaveBackground from '../../components/donor/SoftBlushWaveBackground';
 import Footer from '../../components/Footer';
 import { Button } from '../../components/Button';
 import SearchInput from '../../components/common/SearchInput';
@@ -13,6 +14,7 @@ import PaginationControls from '../../components/common/PaginationControls';
 import EmptyState from '../../components/common/EmptyState';
 import SkeletonRow from '../../components/common/SkeletonRow';
 import { PlusCircle, RefreshCw, AlertCircle, FileText } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const BLOOD_GROUPS = [
   { label: 'All Blood Groups', value: 'ALL' },
@@ -43,6 +45,7 @@ const SORT_OPTIONS = [
 
 export default function BloodRequestsListPage() {
   const { user, logout } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [profile, setProfile] = useState(null);
   const [requests, setRequests] = useState([]);
@@ -116,17 +119,63 @@ export default function BloodRequestsListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-navy flex flex-col justify-between antialiased">
-      <HospitalHeader user={user} profile={profile} onLogout={logout} currentPath="/hospital/requests" />
+    <div className="min-h-screen text-brand-navy flex flex-col justify-between antialiased relative select-none overflow-x-hidden">
+      <SoftBlushWaveBackground />
 
-      <main className="flex-grow py-8">
-        <Container size="lg">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <HospitalHeader
+        user={user}
+        profile={profile}
+        onLogout={logout}
+        onToggleSidebar={() => setIsSidebarOpen(true)}
+        currentPath="/hospital/requests"
+      />
+
+      <div className="flex flex-1 p-4 sm:p-6 lg:p-8 gap-6 max-w-[1600px] mx-auto w-full relative z-10">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block shrink-0">
+          <HospitalSidebar
+            activeRoute="/hospital/requests"
+            requestCount={requests.length}
+          />
+        </div>
+
+        {/* Mobile Sidebar Overlay */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 lg:hidden"
+              />
+              <motion.div
+                initial={{ x: -280 }}
+                animate={{ x: 0 }}
+                exit={{ x: -280 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="fixed top-0 left-0 bottom-0 z-50 p-4 lg:hidden"
+              >
+                <HospitalSidebar
+                  activeRoute="/hospital/requests"
+                  requestCount={requests.length}
+                  onCloseMobile={() => setIsSidebarOpen(false)}
+                  className="h-full shadow-2xl"
+                />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Right Content */}
+        <div className="flex-1 space-y-6 overflow-hidden min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 shadow-xs">
             <div>
-              <h1 className="text-2xl font-black text-brand-navy tracking-tight mb-1">
+              <h1 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight mb-1">
                 Hospital Blood Requests Directory
               </h1>
-              <p className="text-xs text-brand-slate">
+              <p className="text-xs text-slate-500 font-medium">
                 All blood requirements issued by {profile?.hospitalName || 'your hospital'}.
               </p>
             </div>
@@ -142,15 +191,15 @@ export default function BloodRequestsListPage() {
           </div>
 
           {/* Status Tabs */}
-          <div className="flex items-center gap-2 border-b border-slate-200 mb-6 overflow-x-auto pb-1">
+          <div className="flex items-center gap-2 border-b border-slate-200 overflow-x-auto pb-1">
             {['ALL', 'OPEN', 'PARTIALLY_FULFILLED', 'FULFILLED', 'CANCELLED'].map((st) => (
               <button
                 key={st}
                 onClick={() => handleFilterChange('status', st)}
-                className={`py-2 px-4 text-xs font-extrabold rounded-t-xl transition-all border-b-2 whitespace-nowrap ${
+                className={`py-2 px-4 text-xs font-bold rounded-t-2xl transition-all border-b-2 whitespace-nowrap ${
                   filters.status === st
-                    ? 'border-brand-red text-brand-red bg-white shadow-sm'
-                    : 'border-transparent text-brand-slate hover:text-brand-navy'
+                    ? 'border-brand-red text-brand-red bg-white/90 shadow-2xs'
+                    : 'border-transparent text-slate-500 hover:text-brand-navy'
                 }`}
               >
                 {st === 'ALL' ? 'All Requests' : st.replace('_', ' ')}
@@ -159,7 +208,7 @@ export default function BloodRequestsListPage() {
           </div>
 
           {/* Search, Filter & Sort Toolbar */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm mb-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
             <SearchInput
               value={filters.search}
               onChange={(s) => handleFilterChange('search', s)}
@@ -194,7 +243,7 @@ export default function BloodRequestsListPage() {
           {isLoading ? (
             <SkeletonRow count={4} type="card" />
           ) : errorMsg ? (
-            <div className="p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm max-w-lg mx-auto text-center my-12">
+            <div className="p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs max-w-lg mx-auto text-center my-12">
               <AlertCircle className="w-8 h-8 mx-auto mb-2 text-rose-600" />
               <p className="font-bold mb-3">{errorMsg}</p>
               <Button variant="outline" size="sm" onClick={loadData} icon={RefreshCw}>
@@ -219,8 +268,8 @@ export default function BloodRequestsListPage() {
               <PaginationControls pagination={pagination} onPageChange={handlePageChange} />
             </div>
           )}
-        </Container>
-      </main>
+        </div>
+      </div>
 
       <Footer />
     </div>

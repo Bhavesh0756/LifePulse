@@ -18,7 +18,6 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    
     const handleLocationChange = () => {
       const path = window.location.pathname;
       const hash = window.location.hash;

@@ -1,76 +1,135 @@
 import React from 'react';
-import Card from '../Card';
-import { Badge } from '../Badge';
-import { HeartPulse, Award, ShieldCheck, MapPin, Calendar } from 'lucide-react';
-import AnimatedCounter from '../animations/AnimatedCounter';
-import { useStaggerFadeIn } from '../../animations/useStaggerFadeIn';
+import AnimatedCounter from '../common/AnimatedCounter';
+import { HeartPulse, Award, ShieldCheck, MapPin } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 
-export default function DonorStatsCards({ profile, user }) {
-  const totalDonations = profile?.totalDonationsCount || 0;
+export default function DonorStatsCards({ profile, historyCount = 0 }) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const totalDonations = profile?.totalDonationsCount !== undefined ? profile.totalDonationsCount : (historyCount || 1);
   const livesSaved = profile?.livesSavedCount || totalDonations * 3;
   const eligibility = profile?.eligibilityStatus || 'ELIGIBLE';
   const radius = profile?.preferredRadiusKm || 25;
-  const staggerRef = useStaggerFadeIn(totalDonations);
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: shouldReduceMotion ? 0 : i * 0.1,
+        duration: 0.4,
+        ease: 'easeOut',
+      },
+    }),
+  };
 
   return (
-    <div ref={staggerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      {/* Total Donations */}
-      <Card variant="default" className="p-5 border border-slate-200">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* 1. TOTAL DONATIONS */}
+      <motion.div
+        custom={0}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
+      >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Donations</span>
-          <div className="w-9 h-9 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Total Donations
+          </span>
+          <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100/80 text-brand-red flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <HeartPulse className="w-5 h-5" />
           </div>
         </div>
-        <div className="flex items-baseline gap-2">
-          <AnimatedCounter value={totalDonations} className="text-3xl font-black text-brand-navy" />
-          <span className="text-xs text-brand-slate font-medium">units donated</span>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight">
+            <AnimatedCounter value={totalDonations} />
+          </div>
+          <span className="text-xs sm:text-sm text-slate-500 font-medium mt-1 block">
+            Units Contributed
+          </span>
         </div>
-      </Card>
+      </motion.div>
 
-      {/* Lives Saved */}
-      <Card variant="default" className="p-5 border border-slate-200">
+      {/* 2. LIVES SAVED */}
+      <motion.div
+        custom={1}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
+      >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Lives Saved</span>
-          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Lives Saved
+          </span>
+          <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100/80 text-emerald-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <Award className="w-5 h-5" />
           </div>
         </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-black text-brand-navy">~</span><AnimatedCounter value={livesSaved} className="text-3xl font-black text-brand-navy" />
-          <span className="text-xs text-emerald-700 font-bold">patients helped</span>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight flex items-baseline">
+            <span className="mr-0.5">~</span>
+            <AnimatedCounter value={livesSaved} />
+          </div>
+          <span className="text-xs sm:text-sm text-emerald-600 font-semibold mt-1 block">
+            Patients Helped
+          </span>
         </div>
-      </Card>
+      </motion.div>
 
-      {/* Eligibility Status */}
-      <Card variant="default" className="p-5 border border-slate-200">
+      {/* 3. ELIGIBILITY STATUS */}
+      <motion.div
+        custom={2}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
+      >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Eligibility Status</span>
-          <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Eligibility Status
+          </span>
+          <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-100/80 text-blue-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <ShieldCheck className="w-5 h-5" />
           </div>
         </div>
         <div>
-          <Badge variant={eligibility === 'ELIGIBLE' ? 'success' : 'warning'} className="mb-1">
+          <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-bold tracking-wider uppercase rounded-full mb-1">
             {eligibility === 'ELIGIBLE' ? 'READY TO DONATE' : 'TEMPORARILY DEFERRED'}
-          </Badge>
-          <span className="block text-[11px] text-slate-500 font-medium">Verified medical clearance</span>
+          </span>
+          <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+            Verified medical clearance
+          </span>
         </div>
-      </Card>
+      </motion.div>
 
-      {/* Preferred Distance Radius */}
-      <Card variant="default" className="p-5 border border-slate-200">
+      {/* 4. MATCH RADIUS */}
+      <motion.div
+        custom={3}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
+      >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Match Radius</span>
-          <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Match Radius
+          </span>
+          <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100/80 text-purple-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <MapPin className="w-5 h-5" />
           </div>
         </div>
-        <div className="flex items-baseline gap-2">
-          <AnimatedCounter value={radius} className="text-3xl font-black text-brand-navy" />
-          <span className="text-xs text-brand-slate font-medium">km coverage area</span>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight">
+            <AnimatedCounter value={radius} />
+          </div>
+          <span className="text-xs sm:text-sm text-slate-500 font-medium mt-1 block">
+            km Coverage Area
+          </span>
         </div>
-      </Card>
+      </motion.div>
     </div>
   );
 }

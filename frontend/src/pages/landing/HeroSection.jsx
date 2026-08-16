@@ -4,8 +4,11 @@ import { Button } from '../../components/Button';
 import HeroVisual from '../../components/hero/HeroVisual';
 import { HeartPulse, ShieldCheck, PhoneCall, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import AnimeTextReveal from '../../components/animations/AnimeTextReveal';
 import AnimeParticles from '../../components/animations/AnimeParticles';
+=======
+>>>>>>> friend/main
 
 export default function HeroSection() {
   return (
@@ -16,6 +19,14 @@ export default function HeroSection() {
       
       {/* Anime.js Floating Particles */}
       <AnimeParticles count={50} />
+
+      {/* Signature Crimson Light Sweep — Runs ONCE during initial reveal */}
+      <motion.div
+        initial={{ x: '-100%', opacity: 0 }}
+        animate={{ x: '100%', opacity: [0, 0.35, 0] }}
+        transition={{ duration: 1.2, delay: 0.15, ease: 'easeInOut' }}
+        className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-brand-red/20 to-transparent skew-x-12 pointer-events-none z-20"
+      />
 
       <Container size="lg" className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">

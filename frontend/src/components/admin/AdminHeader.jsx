@@ -1,53 +1,79 @@
 import React from 'react';
-import Container from '../Container';
 import NotificationBell from '../notifications/NotificationBell';
-import { Badge } from '../Badge';
 import { Button } from '../Button';
-import { ShieldCheck, LogOut, HeartPulse, User } from 'lucide-react';
+import { ShieldCheck, LogOut, Menu, Search, Calendar, UserCheck } from 'lucide-react';
 
-export default function AdminHeader({ user, onLogout }) {
+export default function AdminHeader({ user, onLogout, onToggleSidebar, searchPlaceholder = 'Search anything...' }) {
+  // Format current date e.g. "May 20, 2026"
+  const formattedDate = new Date().toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-      <Container size="lg">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & Role Badge */}
-          <div className="flex items-center gap-3">
-            <a href="/admin/dashboard" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-brand-red text-white flex items-center justify-center font-black shadow-sm">
-                <HeartPulse className="w-5 h-5" />
-              </div>
-              <span className="text-lg font-black text-brand-navy tracking-tight">
-                LifePulse <span className="text-brand-red text-xs uppercase px-2 py-0.5 rounded bg-rose-50 border border-rose-100 font-bold ml-1">Admin</span>
-              </span>
-            </a>
-          </div>
-
-          {/* Admin Identity, Notifications & Logout */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl">
-              <div className="w-7 h-7 rounded-lg bg-brand-navy text-white flex items-center justify-center font-bold text-xs">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="text-left text-xs">
-                <span className="block font-bold text-brand-navy leading-tight">{user?.name || 'Administrator'}</span>
-                <span className="block text-[10px] text-slate-500 font-mono">{user?.email}</span>
-              </div>
-            </div>
-
-            <NotificationBell />
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onLogout}
-              icon={LogOut}
-              className="text-slate-600 hover:text-rose-600"
+    <header className="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm select-none">
+      <div className="px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        {/* Left Side: Sidebar Toggle & Quick Search */}
+        <div className="flex items-center gap-3 flex-1 max-w-md">
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              className="p-2 rounded-xl text-slate-500 hover:text-brand-navy hover:bg-slate-100 transition-colors"
+              title="Toggle Navigation Menu"
             >
-              Sign Out
-            </Button>
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Top Search Input */}
+          <div className="relative w-full hidden sm:block">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              readOnly
+              className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-10 pr-4 py-2 text-xs font-medium text-brand-navy placeholder:text-slate-400 focus:outline-none focus-red-glow"
+            />
           </div>
         </div>
-      </Container>
+
+        {/* Right Side: Date Badge, Notification Bell & Admin Identity */}
+        <div className="flex items-center gap-3">
+          {/* Current Date Badge */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-600">
+            <Calendar className="w-3.5 h-3.5 text-brand-red" />
+            <span>{formattedDate}</span>
+          </div>
+
+          <NotificationBell />
+
+          {/* Admin User Profile Pill */}
+          <div className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-2xl">
+            <div className="w-7 h-7 rounded-xl bg-brand-red text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div className="text-left text-xs hidden md:block">
+              <span className="block font-black text-brand-navy leading-tight">
+                {user?.name || 'Admin'}
+              </span>
+              <span className="block text-[10px] text-slate-500 font-bold">
+                Super Administrator
+              </span>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onLogout}
+            icon={LogOut}
+            className="text-slate-600 hover:text-brand-red border-slate-200"
+          >
+            Sign Out
+          </Button>
+        </div>
+      </div>
     </header>
   );
 }

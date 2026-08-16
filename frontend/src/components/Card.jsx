@@ -9,12 +9,12 @@ export default function Card({
   ...props
 }) {
   const variantStyles = {
-    default: 'bg-white border border-slate-200/80 shadow-card text-brand-navy',
-    elevated: 'bg-white border border-slate-100 shadow-card-hover text-brand-navy',
-    glass: 'glass-panel text-brand-navy',
-    dark: 'glass-dark text-white',
-    interactive: 'bg-white border border-slate-200/80 shadow-card hover:shadow-card-hover hover:border-brand-red/30 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer text-brand-navy',
-    borderAccent: 'bg-white border-l-4 border-l-brand-red border-y border-r border-slate-200/80 shadow-card text-brand-navy',
+    default: 'bg-white border border-slate-200/80 shadow-card text-brand-navy hover-crimson-card',
+    elevated: 'bg-white border border-slate-100 shadow-card-hover text-brand-navy hover-crimson-card',
+    glass: 'glass-panel text-brand-navy hover-crimson-card',
+    dark: 'glass-dark text-white hover-crimson-card',
+    interactive: 'bg-white border border-slate-200/80 shadow-card hover-crimson-card cursor-pointer text-brand-navy',
+    borderAccent: 'bg-white border-l-4 border-l-brand-red border-y border-r border-slate-200/80 shadow-card text-brand-navy hover-crimson-card',
   };
 
   return (
