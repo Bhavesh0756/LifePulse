@@ -45,7 +45,7 @@ export default function HospitalOverviewStrip({ requests = [] }) {
       icon: HeartPulse,
       iconColor: 'text-brand-red',
       backplateBg: 'bg-rose-200',
-      desktopClasses: 'lg:z-30 lg:rotate-1 lg:scale-105 lg:-ml-4', 
+      desktopClasses: 'lg:z-30 lg:rotate-1 lg:scale-105', 
       isFocal: true,
     },
     {
@@ -56,7 +56,7 @@ export default function HospitalOverviewStrip({ requests = [] }) {
       icon: Droplet,
       iconColor: 'text-blue-600',
       backplateBg: 'bg-blue-200',
-      desktopClasses: 'lg:z-20 lg:rotate-2 lg:-translate-y-1 lg:-ml-4',
+      desktopClasses: 'lg:z-20 lg:rotate-2 lg:-translate-y-1',
       isFocal: false,
     },
     {
@@ -67,7 +67,7 @@ export default function HospitalOverviewStrip({ requests = [] }) {
       icon: CheckCircle2,
       iconColor: 'text-emerald-600',
       backplateBg: 'bg-emerald-200',
-      desktopClasses: 'lg:z-10 lg:-rotate-2 lg:translate-y-2 lg:-ml-4',
+      desktopClasses: 'lg:z-10 lg:-rotate-2 lg:translate-y-2',
       isFocal: false,
     },
   ];
@@ -96,13 +96,13 @@ export default function HospitalOverviewStrip({ requests = [] }) {
   };
 
   return (
-    // Statistics Stage: controlled height, margin bottom provides strict 32px separation
-    <div className="w-full mb-8 relative lg:h-[220px] flex items-center justify-center">
+    // Statistics Stage: controlled height, responsive margin bottom provides comfortable separation
+    <div className="w-full mb-6 sm:mb-8 lg:mb-12 xl:mb-14 relative lg:h-[220px] flex items-center justify-center">
       <motion.div 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-center w-full gap-4 lg:gap-0"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-center w-full gap-4 lg:gap-6"
       >
         {cards.map((card) => {
           const Icon = card.icon;
