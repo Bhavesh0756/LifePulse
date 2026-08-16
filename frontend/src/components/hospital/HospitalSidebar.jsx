@@ -11,7 +11,8 @@ import {
 
 export default function HospitalSidebar({
   activeRoute = '/hospital/dashboard',
-  requestCount = 5,
+  requestCount = 0,
+  activeEmergenciesCount = null,
   className = '',
   onCloseMobile,
 }) {
@@ -90,26 +91,42 @@ export default function HospitalSidebar({
         </nav>
       </div>
 
-      {/* Bottom Motivational LifePulse Card */}
+      {/* Bottom Network Status Card */}
       <div className="mt-8 pt-4 border-t border-slate-100">
-        <div className="bg-gradient-to-br from-rose-50/80 via-white to-rose-50/50 border border-rose-100 rounded-2xl p-4 relative overflow-hidden text-center shadow-xs">
-          <div className="w-10 h-10 rounded-2xl bg-brand-red/10 text-brand-red flex items-center justify-center mx-auto mb-2 shadow-2xs">
-            <Ambulance className="w-5 h-5" />
-          </div>
-
-          <h4 className="text-xs font-bold text-brand-navy leading-tight mb-1">
-            Every Request Saves a Life
+        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <h4 className="text-xs font-black text-brand-navy tracking-wide mb-3 uppercase">
+            Network Status
           </h4>
-          <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
-            Healthcare Command Center
-          </p>
-
-          <div className="mt-3 flex justify-center">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-              <span>Network Active</span>
-            </div>
-          </div>
+          
+          <ul className="space-y-2.5 text-xs font-bold text-slate-600">
+            <li className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Donors Online</span>
+              </div>
+              {/* No fake data */}
+            </li>
+            
+            <li className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span>Verified Hospitals</span>
+              </div>
+              {/* No fake data */}
+            </li>
+            
+            <li className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
+                <span className={activeEmergenciesCount > 0 ? "text-brand-red" : ""}>Active Emergencies</span>
+              </div>
+              {activeEmergenciesCount !== null && (
+                <span className={activeEmergenciesCount > 0 ? "text-brand-red font-black" : "text-slate-400 font-bold"}>
+                  {activeEmergenciesCount}
+                </span>
+              )}
+            </li>
+          </ul>
         </div>
       </div>
     </aside>
