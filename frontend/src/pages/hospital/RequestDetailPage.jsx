@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { hospitalService } from '../../services/hospitalService';
 import HospitalHeader from '../../components/hospital/HospitalHeader';
 import DonorMatchCard from '../../components/hospital/DonorMatchCard';
+import BloodRequestTimeline from '../../components/hospital/BloodRequestTimeline';
 import Container from '../../components/Container';
 import Card from '../../components/Card';
 import Footer from '../../components/Footer';
@@ -195,6 +196,9 @@ export default function RequestDetailPage() {
                   <span>{successMsg}</span>
                 </div>
               )}
+
+              {/* Timeline Section */}
+              <BloodRequestTimeline requestStatus={request.status} matchData={matchData} />
 
               {/* Main Request Information Card */}
               <Card variant="elevated" className="p-8 border border-slate-200">
