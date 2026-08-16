@@ -32,22 +32,22 @@ export default function DonorStatsCards({ profile, historyCount = 0 }) {
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Total Donations
           </span>
-          <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100/80 text-brand-red flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100/80 text-brand-red flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <HeartPulse className="w-5 h-5" />
           </div>
         </div>
         <div>
-          <div className="text-3xl font-black text-brand-navy tracking-tight">
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight">
             <AnimatedCounter value={totalDonations} />
           </div>
-          <span className="text-xs text-slate-500 font-extrabold mt-0.5 block">
-            Units Donated
+          <span className="text-xs sm:text-sm text-slate-500 font-medium mt-1 block">
+            Units Contributed
           </span>
         </div>
       </motion.div>
@@ -58,22 +58,22 @@ export default function DonorStatsCards({ profile, historyCount = 0 }) {
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Lives Saved
           </span>
-          <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100/80 text-emerald-600 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100/80 text-emerald-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <Award className="w-5 h-5" />
           </div>
         </div>
         <div>
-          <div className="text-3xl font-black text-brand-navy tracking-tight flex items-baseline">
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight flex items-baseline">
             <span className="mr-0.5">~</span>
             <AnimatedCounter value={livesSaved} />
           </div>
-          <span className="text-xs text-emerald-600 font-extrabold mt-0.5 block">
+          <span className="text-xs sm:text-sm text-emerald-600 font-semibold mt-1 block">
             Patients Helped
           </span>
         </div>
@@ -85,21 +85,21 @@ export default function DonorStatsCards({ profile, historyCount = 0 }) {
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Eligibility Status
           </span>
-          <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-100/80 text-blue-600 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-100/80 text-blue-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <ShieldCheck className="w-5 h-5" />
           </div>
         </div>
         <div>
-          <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[10px] font-black tracking-wider uppercase rounded-full mb-1">
+          <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-bold tracking-wider uppercase rounded-full mb-1">
             {eligibility === 'ELIGIBLE' ? 'READY TO DONATE' : 'TEMPORARILY DEFERRED'}
           </span>
-          <span className="text-xs text-slate-500 font-medium block">
+          <span className="text-xs sm:text-sm text-slate-500 font-medium block">
             Verified medical clearance
           </span>
         </div>
@@ -111,21 +111,21 @@ export default function DonorStatsCards({ profile, historyCount = 0 }) {
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+        className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-3xl p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Match Radius
           </span>
-          <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100/80 text-purple-600 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100/80 text-purple-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
             <MapPin className="w-5 h-5" />
           </div>
         </div>
         <div>
-          <div className="text-3xl font-black text-brand-navy tracking-tight">
+          <div className="text-3xl sm:text-4xl font-extrabold text-brand-navy tracking-tight">
             <AnimatedCounter value={radius} />
           </div>
-          <span className="text-xs text-slate-500 font-extrabold mt-0.5 block">
+          <span className="text-xs sm:text-sm text-slate-500 font-medium mt-1 block">
             km Coverage Area
           </span>
         </div>

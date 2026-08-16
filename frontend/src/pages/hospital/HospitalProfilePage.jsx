@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { hospitalService } from '../../services/hospitalService';
 import HospitalHeader from '../../components/hospital/HospitalHeader';
+import HospitalSidebar from '../../components/hospital/HospitalSidebar';
+import SoftBlushWaveBackground from '../../components/donor/SoftBlushWaveBackground';
 import Container from '../../components/Container';
 import Card from '../../components/Card';
 import Footer from '../../components/Footer';
 import { Button } from '../../components/Button';
 import { Badge } from '../../components/Badge';
-import { Hospital, MapPin, Phone, ShieldCheck, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Hospital, MapPin, Phone, Save, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HospitalProfilePage() {
   const { user, logout } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState({
@@ -113,15 +116,59 @@ export default function HospitalProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-navy flex flex-col justify-between antialiased">
-      <HospitalHeader user={user} profile={profile} onLogout={logout} currentPath="/hospital/profile" />
+    <div className="min-h-screen text-brand-navy flex flex-col justify-between antialiased relative select-none overflow-x-hidden">
+      <SoftBlushWaveBackground />
 
-      <main className="flex-grow py-8">
-        <Container size="md">
+      <HospitalHeader
+        user={user}
+        profile={profile}
+        onLogout={logout}
+        onToggleSidebar={() => setIsSidebarOpen(true)}
+        currentPath="/hospital/settings"
+      />
+
+      <div className="flex flex-1 p-4 sm:p-6 lg:p-8 gap-6 max-w-[1600px] mx-auto w-full relative z-10">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block shrink-0">
+          <HospitalSidebar
+            activeRoute="/hospital/settings"
+          />
+        </div>
+
+        {/* Mobile Sidebar Overlay */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 lg:hidden"
+              />
+              <motion.div
+                initial={{ x: -280 }}
+                animate={{ x: 0 }}
+                exit={{ x: -280 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="fixed top-0 left-0 bottom-0 z-50 p-4 lg:hidden"
+              >
+                <HospitalSidebar
+                  activeRoute="/hospital/settings"
+                  onCloseMobile={() => setIsSidebarOpen(false)}
+                  className="h-full shadow-2xl"
+                />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Right Content */}
+        <div className="flex-1 space-y-6 overflow-hidden min-w-0">
           {isLoading ? (
-            <div className="py-20 flex flex-col items-center justify-center gap-3 text-brand-navy">
+            <div className="py-20 flex flex-col items-center justify-center gap-3 text-brand-navy bg-white/80 backdrop-blur-md rounded-3xl border border-slate-200/80">
               <RefreshCw className="w-8 h-8 text-brand-red animate-spin" />
-              <span className="text-sm font-semibold">Loading Hospital Profile...</span>
+              <span className="text-xs font-bold">Loading Hospital Settings...</span>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -129,7 +176,7 @@ export default function HospitalProfilePage() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 rounded-xl text-xs flex items-start gap-2.5 ${
+                  className={`p-4 rounded-2xl text-xs font-medium flex items-start gap-2.5 ${
                     message.type === 'success'
                       ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
                       : 'bg-rose-50 border border-rose-200 text-rose-800'
@@ -145,22 +192,22 @@ export default function HospitalProfilePage() {
               )}
 
               {/* Institution Credentials & Verification Header */}
-              <Card variant="elevated" className="p-6 border border-slate-200">
+              <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-xs">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
                   <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-brand-navy text-white flex items-center justify-center font-bold">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-navy text-white flex items-center justify-center font-bold shadow-xs">
                       <Hospital className="w-6 h-6" />
                     </div>
                     <div>
-                      <h1 className="text-xl font-extrabold text-brand-navy">
+                      <h1 className="text-xl font-black text-brand-navy">
                         {profile?.hospitalName || user?.hospitalName}
                       </h1>
-                      <span className="text-xs text-brand-slate block">Account Email: {user?.email}</span>
+                      <span className="text-xs text-slate-500 font-medium block">Account Email: {user?.email}</span>
                     </div>
                   </div>
 
                   <div>
-                    <Badge variant={profile?.isVerified ? 'success' : 'warning'} className="py-1 px-3 text-xs uppercase">
+                    <Badge variant={profile?.isVerified ? 'success' : 'warning'} className="py-1 px-3 text-xs font-bold uppercase">
                       {profile?.isVerified ? 'VERIFIED HEALTHCARE INSTITUTION' : 'VERIFICATION PENDING'}
                     </Badge>
                   </div>
@@ -177,7 +224,7 @@ export default function HospitalProfilePage() {
                       value={formData.hospitalName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-red focus:bg-white"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-red focus:bg-white"
                     />
                   </div>
 
@@ -195,10 +242,10 @@ export default function HospitalProfilePage() {
                     />
                   </div>
                 </div>
-              </Card>
+              </div>
 
               {/* Location Address */}
-              <Card variant="elevated" className="p-6 border border-slate-200">
+              <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-xs">
                 <h3 className="text-base font-bold text-brand-navy mb-4 flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-brand-red" />
                   <span>Hospital Facility Location</span>
@@ -253,10 +300,10 @@ export default function HospitalProfilePage() {
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
 
               {/* Phone & Emergency Dispatch Contact */}
-              <Card variant="elevated" className="p-6 border border-slate-200">
+              <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-xs">
                 <h3 className="text-base font-bold text-brand-navy mb-4 flex items-center gap-2">
                   <Phone className="w-5 h-5 text-brand-red" />
                   <span>Hospital Contacts & Emergency Dispatch</span>
@@ -311,7 +358,7 @@ export default function HospitalProfilePage() {
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
 
               <div className="flex justify-end">
                 <Button type="submit" variant="primary" size="lg" disabled={isSaving} icon={Save}>
@@ -320,8 +367,8 @@ export default function HospitalProfilePage() {
               </div>
             </form>
           )}
-        </Container>
-      </main>
+        </div>
+      </div>
 
       <Footer />
     </div>

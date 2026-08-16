@@ -6,42 +6,35 @@ import {
   Bell,
   User,
   History,
-  Heart,
   Award,
   Settings,
-  ShieldCheck,
   X,
 } from 'lucide-react';
 
 export default function DonorSidebar({
-  activeTab = 'overview',
-  onTabChange,
+  activeRoute = '/donor/dashboard',
   className = '',
   onCloseMobile,
 }) {
   const shouldReduceMotion = useReducedMotion();
+  const currentPath = window.location.pathname;
 
   const navItems = [
-    { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'requests', label: 'Requests', icon: Bell },
-    { id: 'profile', label: 'My Profile', icon: User },
-    { id: 'history', label: 'History', icon: History },
-    { id: 'impact', label: 'Impact', icon: Heart },
-    { id: 'badges', label: 'Badges', icon: Award },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/donor/dashboard' },
+    { id: 'requests', label: 'Requests', icon: Bell, path: '/donor/requests' },
+    { id: 'profile', label: 'My Profile', icon: User, path: '/donor/profile' },
+    { id: 'history', label: 'History', icon: History, path: '/donor/history' },
+    { id: 'badges', label: 'Badges', icon: Award, path: '/donor/badges' },
+    { id: 'settings', label: 'Settings', icon: Settings, path: '/donor/settings' },
   ];
 
   const ecgPath = 'M0 25 H30 L35 15 L40 35 L45 5 L50 45 L55 20 L60 30 L65 25 H120';
 
-  const handleNavClick = (id) => {
-    if (id === 'overview' || id === 'requests') {
-      onTabChange('overview');
-    } else if (id === 'profile' || id === 'settings') {
-      onTabChange('profile');
-    } else if (id === 'history' || id === 'impact' || id === 'badges') {
-      onTabChange('history');
-    }
+  const handleNavClick = (targetPath) => {
     if (onCloseMobile) onCloseMobile();
+    if (window.location.pathname !== targetPath) {
+      window.location.href = targetPath;
+    }
   };
 
   return (
@@ -67,14 +60,13 @@ export default function DonorSidebar({
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive =
-              (item.id === 'overview' && activeTab === 'overview') ||
-              (item.id === 'profile' && activeTab === 'profile') ||
-              (item.id === 'history' && activeTab === 'history');
+              currentPath === item.path ||
+              (item.path === '/donor/dashboard' && (currentPath === '/donor' || currentPath === '/donor/'));
 
             return (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={() => handleNavClick(item.path)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-extrabold transition-all duration-200 ${
                   isActive
                     ? 'bg-rose-50 text-brand-red border border-rose-100 shadow-xs'
@@ -89,23 +81,23 @@ export default function DonorSidebar({
         </nav>
       </div>
 
-      {/* Hero Bottom Card with Continuous ECG Animation */}
+      {/* Hero Bottom Card with Continuous ECG Heartbeat Animation */}
       <div className="mt-8 pt-4">
         <div className="bg-gradient-to-br from-rose-50/70 via-white to-rose-50/40 border border-rose-100/80 rounded-2xl p-4 relative overflow-hidden shadow-xs">
           <div className="flex items-center gap-1.5 mb-1">
             <h4 className="text-xs font-black text-brand-navy">You're a Hero!</h4>
-            <span className="text-sm">❤️</span>
+            <span className="text-sm animate-pulse">❤️</span>
           </div>
           <p className="text-[11px] text-slate-500 font-medium leading-relaxed mb-3">
             Thank you for saving lives.
           </p>
 
-          {/* ECG Animated Line */}
+          {/* Continuous ECG Animated Heartbeat Line */}
           <div className="h-9 w-full flex items-center justify-center relative overflow-hidden">
             <svg className="w-full h-full text-brand-red overflow-visible" viewBox="0 0 120 50" fill="none">
               <defs>
-                <filter id="heroEcgGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="2" result="blur" />
+                <filter id="heroEcgGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
                   <feMerge>
                     <feMergeNode in="blur" />
                     <feMergeNode in="SourceGraphic" />
@@ -113,33 +105,33 @@ export default function DonorSidebar({
                 </filter>
               </defs>
 
-              {/* Background Path */}
+              {/* Static Background Path */}
               <path
                 d={ecgPath}
                 stroke="#E11D48"
                 strokeWidth="1.8"
-                strokeOpacity="0.25"
+                strokeOpacity="0.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
 
-              {/* Self-drawing Animated Path */}
+              {/* Self-drawing Continuous Heartbeat Wave Path */}
               {!shouldReduceMotion && (
                 <motion.path
                   d={ecgPath}
                   stroke="#E11D48"
-                  strokeWidth="2.5"
+                  strokeWidth="2.6"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#heroEcgGlow)"
                   initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
                   animate={{
-                    pathLength: [0, 0.4, 0.4, 0],
-                    pathOffset: [0, 0, 0.6, 1],
+                    pathLength: [0, 0.45, 0.45, 0],
+                    pathOffset: [0, 0, 0.55, 1],
                     opacity: [0, 1, 1, 0],
                   }}
                   transition={{
-                    duration: 3.2,
+                    duration: 3.0,
                     repeat: Infinity,
                     ease: 'easeInOut',
                   }}

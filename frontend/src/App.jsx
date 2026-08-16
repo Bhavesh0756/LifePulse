@@ -7,6 +7,11 @@ import RegisterPage from './pages/auth/RegisterPage';
 
 // Donor Portal Pages
 import DonorDashboardPage from './pages/donor/DonorDashboardPage';
+import DonorRequestsPage from './pages/donor/DonorRequestsPage';
+import DonorProfilePage from './pages/donor/DonorProfilePage';
+import DonorHistoryPage from './pages/donor/DonorHistoryPage';
+import DonorBadgesPage from './pages/donor/DonorBadgesPage';
+import DonorSettingsPage from './pages/donor/DonorSettingsPage';
 
 // Hospital Portal Pages
 import HospitalDashboardPage from './pages/hospital/HospitalDashboardPage';
@@ -60,7 +65,42 @@ export default function App() {
     if (path === '/login') return <LoginPage />;
     if (path === '/register') return <RegisterPage />;
 
-    // Donor Routes
+    // Donor Dedicated Routes
+    if (path === '/donor/requests') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorRequestsPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/profile') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorProfilePage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/history') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorHistoryPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/badges') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorBadgesPage />
+        </ProtectedRoute>
+      );
+    }
+    if (path === '/donor/settings') {
+      return (
+        <ProtectedRoute allowedRoles={['DONOR']}>
+          <DonorSettingsPage />
+        </ProtectedRoute>
+      );
+    }
     if (path.startsWith('/donor')) {
       return (
         <ProtectedRoute allowedRoles={['DONOR']}>
@@ -69,7 +109,7 @@ export default function App() {
       );
     }
 
-    // Hospital Routes
+    // Hospital Dedicated Routes
     if (path === '/hospital/requests/new') {
       return (
         <ProtectedRoute allowedRoles={['HOSPITAL']}>
@@ -91,7 +131,7 @@ export default function App() {
         </ProtectedRoute>
       );
     }
-    if (path === '/hospital/profile') {
+    if (path === '/hospital/settings' || path === '/hospital/profile') {
       return (
         <ProtectedRoute allowedRoles={['HOSPITAL']}>
           <HospitalProfilePage />
