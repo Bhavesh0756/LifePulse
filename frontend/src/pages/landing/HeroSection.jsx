@@ -4,11 +4,8 @@ import { Button } from '../../components/Button';
 import HeroVisual from '../../components/hero/HeroVisual';
 import { HeartPulse, ShieldCheck, PhoneCall, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-<<<<<<< HEAD
 import AnimeTextReveal from '../../components/animations/AnimeTextReveal';
 import AnimeParticles from '../../components/animations/AnimeParticles';
-=======
->>>>>>> friend/main
 
 export default function HeroSection() {
   return (
