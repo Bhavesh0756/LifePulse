@@ -69,7 +69,7 @@ export default function AnimeParticles({ className = '' }) {
   ];
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none -z-10 ${className}`}>
       <svg ref={svgRef} className="w-full h-full opacity-60">
         <defs>
           <radialGradient id="nodeGlow">

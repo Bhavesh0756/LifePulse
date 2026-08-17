@@ -5,7 +5,7 @@ export default function ImpactRipple({ duration = 3.6, shouldReduceMotion = fals
   if (shouldReduceMotion) return null;
 
   return (
-    <div className="absolute top-[37%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-8 pointer-events-none z-15">
+    <div className="absolute top-[37%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-4 pointer-events-none z-15">
       <motion.div
         initial={{ opacity: 0, scale: 0.3 }}
         animate={{

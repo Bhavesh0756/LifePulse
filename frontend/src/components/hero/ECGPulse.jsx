@@ -10,7 +10,7 @@ export default function ECGPulse({ duration = 3.6, shouldReduceMotion: propReduc
   const ecgPath = "M10 30 H50 L62 10 L75 52 L88 8 L98 30 H140";
 
   return (
-    <div className={`absolute top-[52.5%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-16 pointer-events-none z-25 ${className}`}>
+    <div className={`absolute top-[52.5%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-[26px] pointer-events-none z-25 ${className}`}>
       <svg viewBox="0 0 150 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
         <defs>
           <filter id="ecgFlashGlow" x="-30%" y="-30%" width="160%" height="160%">
